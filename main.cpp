@@ -7,12 +7,12 @@
 //
 
 #include <iostream>
-#include <Eigen/Dense>
-
-using Eigen::MatrixXd;
+#include "AKSphere.h"
+#include "AKCollisionDetectionSystem.h"
 
 int main(int argc, const char * argv[]) {
-    Eigen::MatrixXd matrix;
+    AKSphere *sphere;
+    sphere->getCenter();
     std::cout << "Hello, World!\n";
     return 0;
 }

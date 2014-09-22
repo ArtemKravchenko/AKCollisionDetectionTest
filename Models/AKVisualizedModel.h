@@ -6,10 +6,17 @@
 //  Copyright (c) 2014 ShowTime. All rights reserved.
 //
 
+#ifndef AK_VISUALIZED_MODEL
+#define AK_VISUALIZED_MODEL
+
 class AKVisualizedModel {
-    
-    
+
+private:
+    bool _isVisible;
+
 public:
-    bool isVisible();
-    
+    bool isVisible() { return _isVisible; }
+    void setVisible(bool visible) { _isVisible = visible; }
 };
+
+#endif

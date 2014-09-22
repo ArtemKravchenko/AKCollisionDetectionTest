@@ -6,3 +6,14 @@
 //  Copyright (c) 2014 ShowTime. All rights reserved.
 //
 
+#ifndef AK_GEOMETRIC_UTILS
+#define AK_GEOMETRIC_UTILS
+
+class AKGeometricUtils {
+    
+    
+public:
+    
+};
+
+#endif
