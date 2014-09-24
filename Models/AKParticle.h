@@ -10,12 +10,15 @@
 #define AK_PARTICLE
 
 #include "AKShape.h"
+#include "AKSphere.h"
 
 class AKParticle : public AKShape {
     
+private:
+    AKSphere    *_sphere;
     
 public:
-    
+    AKSphere const * getSphere() const;
 };
 
 #endif

@@ -8,7 +8,6 @@
 
 #include <iostream>
 #include "AKSphere.h"
-#include "AKCollisionDetectionSystem.h"
 
 int main(int argc, const char * argv[]) {
     AKSphere *sphere;
