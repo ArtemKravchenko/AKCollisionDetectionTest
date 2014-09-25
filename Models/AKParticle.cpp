@@ -16,3 +16,15 @@ AKSphere const * AKParticle::getSphere() const
 {
     return _sphere;
 }
+int AKParticle::getMass() const
+{
+    return _mass;
+}
+int AKParticle::getLocalTime() const
+{
+    return _localTime;
+}
+VectorXd const * AKParticle::getVelocity() const
+{
+    return _velocity;
+}

@@ -10,11 +10,14 @@
 #define AK_BOX
 
 #include "AKVisualizedModel.h"
+#include "AKRectangle.h"
 
 class AKBox : public AKVisualizedModel {
     
-public:
+    AKRectangle     *_rectangle;
     
+public:
+    AKRectangle const * getRectangle() const;
 };
 
 #endif

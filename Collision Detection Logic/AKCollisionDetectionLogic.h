@@ -23,7 +23,8 @@ struct AKEvent {
     AKEventType     eventType;
     AKParticle      *firstParticle;
     AKParticle      *secondParticle;
-    AKBox           *box;
+    double          measure;
+    double          timeToEvent;
 };
 
 typedef std::vector <AKCell*> AKCellsList;
@@ -39,14 +40,17 @@ private:
     AKCellsList         *_cellList;         // list of cells
     int                 _cellsCountInRow;   // Number of cells in each imaginary row
     int                 _cellsCountInCol;   // Number of cells in each imaginary column
-    int                 _cellWidth;         // Width of cell
-    int                 _cellHeight;        // Height of cell
+    double              _cellWidth;         // Width of cell
+    double              _cellHeight;        // Height of cell
+    double              _cellDepth;         // Depth of cell
     AKEvent             *nextEvent;         // Event that happens in time with smallest interval
     /* ------------------------------ METHODS ------------------------------ */
-    int numberOfCellForParticle(AKParticle const * particle);
-    void fillNeighborsForCell(AKCell *cell,int index);
-    AKEvent* getEvent(AKParticle const * firstParticle, AKParticle const * secondParticle);
-    AKEvent* getEvent(AKParticle const * firstParticle, AKBox const * box);
+    int         numberOfCellForParticle(AKParticle const * particle);
+    void        fillNeighborsForCell(AKCell *cell,int index);
+    AKEvent*    getEvent(AKParticle const * firstParticle, AKParticle const * secondParticle);
+    AKEvent*    getEvent(AKParticle const * firstParticle, AKBox const * box);
+    void        addEventsForParticleAndParticlesInCurrentCell(AKParticle *particle, AKCell* cell, int startIndex);
+    void        addEventsForParticleAndParticlesInNeighborCells(AKParticle *particle, const int *neighborsIndexes);
     
 public:
     /* ------------------------------ METHODS ------------------------------ */

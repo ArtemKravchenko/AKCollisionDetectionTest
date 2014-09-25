@@ -16,9 +16,15 @@ class AKParticle : public AKShape {
     
 private:
     AKSphere    *_sphere;
+    double      _mass;
+    double      _localTime;
+    VectorXd    *_velocity;
     
 public:
-    AKSphere const * getSphere() const;
+    AKSphere const *    getSphere() const;
+    int                 getMass() const;
+    int                 getLocalTime() const;
+    VectorXd const *    getVelocity() const;
 };
 
 #endif
