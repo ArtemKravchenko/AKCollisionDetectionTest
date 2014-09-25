@@ -127,25 +127,30 @@ AKEvent* AKCollisionDetectionLogic::getEvent(AKParticle const * firstParticle, A
 }
 AKEvent* AKCollisionDetectionLogic::getEvent(AKParticle const * firstParticle, AKBox const * box)
 {
-    // TODO: !!! Need to take acount that there are two separate types of events with cell's bound:
-    // 1. Particle collided with system bound
-    // 2. Particle left measure of cell
     double timeToEvent = std::numeric_limits<double>::max(), measure = 0.0, tmpTimeToEvent, tmpMeasure;
     AKRectangle const* rect = box->getRectangle();
     VectorXd const *boxCenter = rect->getCenter();
     VectorXd const *boxRadius = rect->getRadius();
+    VectorXd const *systemBoundsCenter = _bounds->getRectangle()->getCenter();
+    VectorXd const *systemBoundsRadius = _bounds->getRectangle()->getRadius();
     int count = (!rect->is2Ddimension()) ? 3 : 2;
+    double systemMeasure;
+    bool isSystemBound;
     AKCollisionCompareType array[3] = {AKCollisionCompareXType, AKCollisionCompareYType, AKCollisionCompareZType};
     // Finding the lowest value of collision time with greater X, lesser X, greater Y, lesser Y, greater Z, lesser Z coordinate of box
     for (int i = 0; i < count; i++) {
         tmpMeasure = (*boxCenter)[i] + (*boxRadius)[i];
-        tmpTimeToEvent = AKGeometricUtils::getInstance().getTimeToCollisionBetweenParticleAndBound(firstParticle, tmpMeasure, array[i]);
+        systemMeasure = (*systemBoundsCenter)[i] + (*systemBoundsRadius)[i];
+        isSystemBound = (tmpMeasure == systemMeasure);
+        tmpTimeToEvent = AKGeometricUtils::getInstance().getTimeToCollisionBetweenParticleAndBound(firstParticle, tmpMeasure, array[i], isSystemBound, true);
         if (tmpTimeToEvent > 0 && tmpTimeToEvent < timeToEvent) {
             timeToEvent = tmpTimeToEvent;
             measure = tmpMeasure;
         }
         tmpMeasure = (*boxCenter)[i] - (*boxRadius)[i];
-        tmpTimeToEvent = AKGeometricUtils::getInstance().getTimeToCollisionBetweenParticleAndBound(firstParticle, tmpMeasure, array[i]);
+        systemMeasure = (*systemBoundsCenter)[i] - (*systemBoundsRadius)[i];
+        isSystemBound = (tmpMeasure == systemMeasure);
+        tmpTimeToEvent = AKGeometricUtils::getInstance().getTimeToCollisionBetweenParticleAndBound(firstParticle, tmpMeasure, array[i], isSystemBound, false);
         if (tmpTimeToEvent > 0 && tmpTimeToEvent < timeToEvent) {
             timeToEvent = tmpTimeToEvent;
             measure = tmpMeasure;

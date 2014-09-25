@@ -29,32 +29,46 @@ int AKGeometricUtils::getTimeToCollisionBetweenTwoParticles(AKParticle const *p1
     time = (B - sqrtl(D)) / A;
     return time;
 }
-int AKGeometricUtils::getTimeToCollisionBetweenParticleAndBound(AKParticle const *particle, double bound, AKCollisionCompareType type)
+int AKGeometricUtils::getTimeToCollisionBetweenParticleAndBound(AKParticle const *particle, double bound, AKCollisionCompareType type, bool isSystemBound, bool isGreaterMeasure)
 {
     double r1 = bound, r0, v;
-    VectorXd *vectorR = (VectorXd*)particle->getSphere()->getCenter();
+    double radius = (particle->getSphere())->getRadius();
+    VectorXd *vectorC = (VectorXd*)particle->getSphere()->getCenter();
     VectorXd *vectorV = (VectorXd*)particle->getVelocity();
     switch (type) {
         case AKCollisionCompareXType:
         {
-            r0 = (*vectorR)[0];
+            r0 = (*vectorC)[0];
             v =  (*vectorV)[0];
         }
             break;
         case AKCollisionCompareYType:
         {
-            r0 = (*vectorR)[1];
+            r0 = (*vectorC)[1];
             v =  (*vectorV)[1];
         }
             break;
         case AKCollisionCompareZType:
         {
-            r0 = (*vectorR)[2];
+            r0 = (*vectorC)[2];
             v =  (*vectorV)[2];
         }
             break;
         default:
             break;
+    }
+    if (isSystemBound) {
+        if (isGreaterMeasure) {
+            r0 += radius;
+        } else {
+            r0 -= radius;
+        }
+    } else {
+        if (isGreaterMeasure) {
+            r0 -= radius;
+        } else {
+            r0 += radius;
+        }
     }
     double time = (r1 - r0) / v - particle->getLocalTime();
     

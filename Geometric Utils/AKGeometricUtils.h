@@ -29,7 +29,7 @@ private:
     
 public:
     int getTimeToCollisionBetweenTwoParticles(AKParticle const *p1, AKParticle const *p2);
-    int getTimeToCollisionBetweenParticleAndBound(AKParticle const *particle, double bound, AKCollisionCompareType type);
+    int getTimeToCollisionBetweenParticleAndBound(AKParticle const *particle, double bound, AKCollisionCompareType type, bool isSystemBound, bool isGreaterMeasure);
     // SINGLETON
     static AKGeometricUtils& getInstance()
     {
