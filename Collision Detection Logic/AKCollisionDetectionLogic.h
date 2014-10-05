@@ -11,13 +11,14 @@
 
 #include "AKCell.h"
 #include <vector>
-#include <queue>
 
 typedef enum {
     AKEventParticleToParticleType,
     AKEventParticleToBoundType,
     AKEventParticleToCellType,
 } AKEventType;
+
+using std::vector;
 
 struct AKEvent {
     AKEventType     eventType;
@@ -27,38 +28,51 @@ struct AKEvent {
     double          timeToEvent;
 };
 
-typedef std::vector <AKCell*> AKCellsList;
-typedef std::priority_queue<AKEvent*> AKEventsQueue;
+typedef vector<AKCell*>     AKCellsList;
+typedef vector<AKEvent*>    AKEventsList;
 
 class AKCollisionDetectionLogic {
     
 private:
     /* ----------------------------- VARIABLES ----------------------------- */
-    AKBox               *_bounds;           // bounds of system
-    AKParticlesList     *_particleList;     // list of particles
-    AKEventsQueue       *_eventsQueue;      // priority queue of events
-    AKCellsList         *_cellList;         // list of cells
-    int                 _cellsCountInRow;   // Number of cells in each imaginary row
-    int                 _cellsCountInCol;   // Number of cells in each imaginary column
-    double              _cellWidth;         // Width of cell
-    double              _cellHeight;        // Height of cell
-    double              _cellDepth;         // Depth of cell
-    AKEvent             *nextEvent;         // Event that happens in time with smallest interval
+    bool                _isBoundsAlreadySet = false;    // Flag manage is bounds was already set
+    bool                _isParticlesAlreadySet = false; // Flag manage is particles was already set
+    AKBox               *_bounds;                       // bounds of system
+    AKParticlesList     *_particleList;                 // list of particles
+    AKEventsList        *_eventsList;                   // list of events
+    AKCellsList         *_cellList;                     // list of cells
+    int                 _cellsCountInRow;               // Number of cells in each imaginary row
+    int                 _cellsCountInCol;               // Number of cells in each imaginary column
+    int                 _cellsCountInRange;             // Number of cells in each imaginary range
+    double              _cellWidth;                     // Width of cell
+    double              _cellHeight;                    // Height of cell
+    double              _cellDepth;                     // Depth of cell
+    AKEvent             *_nextEvent;                    // Event that happens in time with smallest interval
+    double              _timeTotal;                     // Counter of globale time
+    double              _timeToEvent;                   // Time to event occurs
+    double              _error;                         // Error of computations
     /* ------------------------------ METHODS ------------------------------ */
-    int         numberOfCellForParticle(AKParticle const * particle);
-    void        fillNeighborsForCell(AKCell *cell,int index);
-    AKEvent*    getEvent(AKParticle const * firstParticle, AKParticle const * secondParticle);
-    AKEvent*    getEvent(AKParticle const * firstParticle, AKBox const * box);
-    void        addEventsForParticleAndParticlesInCurrentCell(AKParticle *particle, AKCell* cell, int startIndex);
-    void        addEventsForParticleAndParticlesInNeighborCells(AKParticle *particle, const int *neighborsIndexes);
+    void            fillNeighborsForCell(AKCell *cell,int index);
+    inline int      indexOfCellForParticle(AKParticle const * particle);
+    inline AKEvent* getEvent(AKParticle const * firstParticle, AKParticle const * secondParticle);
+    inline AKEvent* getEvent(AKParticle const * firstParticle, AKBox const * box);
+    inline AKEvent* nextEventFromListEvents();
+    inline void     updateParticlesLocation();
+    inline void     addEventsForParticleAndParticlesInCurrentCell(AKParticle *particle, AKCell* cell, unsigned int startIndex);
+    inline void     addEventsForParticleAndParticlesInNeighborCells(AKParticle *particle, const unsigned int *neighborsIndexes);
+    inline void     handleParticleToParticleCollisionEvent();
+    inline void     handleParticleToBoundCollisionEvent();
+    inline void     handleParticleLeftCellCollisionEvent();
+    inline void     removeEventsForParticle(AKParticle* particle);
+    inline void     addEventsRelatedToParticle(AKParticle* particle);
+    inline bool     isEventContainsParticle(AKEvent *event, AKParticle* particle);
     
 public:
     /* ------------------------------ METHODS ------------------------------ */
     void fillEventsInQueue();
     void updateEventQueueInTime(int time);
     void setParticlesList(AKParticlesList *particlsList);
-    void setBound(AKBox* bounds);
-    void setCellRowAndCol(int row, int col);
+    void setBound(AKBox* bounds, unsigned int row = 1, unsigned int col = 1, unsigned int range = 0);
 };
 
 #endif

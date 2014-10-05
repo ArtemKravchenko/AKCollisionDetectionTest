@@ -14,19 +14,9 @@
 
 using namespace Eigen;
 
-class AKRectangle : public AKShape  {
-    
-private:
-    Eigen::VectorXd     *_center;
-    Eigen::VectorXd     *_radius;
-    
-public:
-    AKRectangle();
-    AKRectangle(float xCenter, float yCenter, float xRadius, float yRadius);
-    AKRectangle(float xCenter, float yCenter, float zCenter, float xRadius, float yRadius, float zRadius);
-    ~AKRectangle();
-    VectorXd const* getCenter() const;
-    VectorXd const* getRadius() const;
+struct AKRectangle : public AKShape  {
+    Eigen::VectorXd     *center;
+    Eigen::VectorXd     *radius;
 };
 
 #endif

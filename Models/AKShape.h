@@ -9,14 +9,8 @@
 #ifndef AK_SHAPE
 #define AK_SHAPE
 
-class AKShape {
-    
-private:
-    bool                _is2Ddimension;
-    
-public:
-    const bool is2Ddimension() const { return _is2Ddimension; }
-    void set2Ddimension(bool is2Ddimension) { _is2Ddimension = is2Ddimension; }
+struct AKShape {
+    bool  is2Ddimension;
 };
 
 #endif
