@@ -10,16 +10,17 @@
 #include <cmath>
 #include "AKGeometricUtils.h"
 #include "AKSphere.h"
+#include "AKException.h"
 
 int AKGeometricUtils::getTimeToCollisionBetweenTwoParticles(AKParticle const *p1, AKParticle const *p2)
 {
     double time;
-    VectorXd v1 = *p1->getVelocity(),
-            v2 = *p2->getVelocity(),
-            r10 = *p1->getSphere()->getCenter(),
-            r20shift = *p2->getSphere()->getCenter() + (p1->getLocalTime() - p2->getLocalTime())*(*p2->getVelocity()),
+    VectorXd v1 = *p1->velocity,
+            v2 = *p2->velocity,
+            r10 = *p1->sphere->center,
+            r20shift = *p2->sphere->center + (p1->localTime - p2->localTime)*(*p2->velocity),
             deltaV, deltaR;
-    double L = p1->getSphere()->getRadius() + p2->getSphere()->getRadius(),
+    double L = p1->sphere->radius + p2->sphere->radius,
             A, B, D;
     deltaV = v1 - v2;
     deltaR = r10 - r20shift;
@@ -32,9 +33,9 @@ int AKGeometricUtils::getTimeToCollisionBetweenTwoParticles(AKParticle const *p1
 int AKGeometricUtils::getTimeToCollisionBetweenParticleAndBound(AKParticle const *particle, double bound, AKCollisionCompareType type, bool isSystemBound, bool isGreaterMeasure)
 {
     double r1 = bound, r0, v;
-    double radius = (particle->getSphere())->getRadius();
-    VectorXd *vectorC = (VectorXd*)particle->getSphere()->getCenter();
-    VectorXd *vectorV = (VectorXd*)particle->getVelocity();
+    double radius = (particle->sphere)->radius;
+    VectorXd *vectorC = (VectorXd*)particle->sphere->center;
+    VectorXd *vectorV = (VectorXd*)particle->velocity;
     switch (type) {
         case AKCollisionCompareXType:
         {
@@ -55,6 +56,7 @@ int AKGeometricUtils::getTimeToCollisionBetweenParticleAndBound(AKParticle const
         }
             break;
         default:
+            throw new wrongCollisionCompareTypeException();
             break;
     }
     if (isSystemBound) {
@@ -70,7 +72,7 @@ int AKGeometricUtils::getTimeToCollisionBetweenParticleAndBound(AKParticle const
             r0 += radius;
         }
     }
-    double time = (r1 - r0) / v - particle->getLocalTime();
+    double time = (r1 - r0) / v - particle->localTime;
     
     return time;
 }

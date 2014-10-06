@@ -12,19 +12,11 @@
 #include "AKShape.h"
 #include "AKSphere.h"
 
-class AKParticle : public AKShape {
-    
-private:
-    AKSphere    *_sphere;
-    double      _mass;
-    double      _localTime;
-    VectorXd    *_velocity;
-    
-public:
-    AKSphere const *    getSphere() const;
-    int                 getMass() const;
-    int                 getLocalTime() const;
-    VectorXd const *    getVelocity() const;
+struct AKParticle : public AKShape {
+    AKSphere    *sphere;
+    double      mass;
+    double      localTime;
+    VectorXd    *velocity;
 };
 
 #endif

@@ -12,12 +12,8 @@
 #include "AKVisualizedModel.h"
 #include "AKRectangle.h"
 
-class AKBox : public AKVisualizedModel {
-    
-    AKRectangle     *_rectangle;
-    
-public:
-    AKRectangle const * getRectangle() const;
+struct AKBox : public AKVisualizedModel {
+    AKRectangle     *rectangle;
 };
 
 #endif

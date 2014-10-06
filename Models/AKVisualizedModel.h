@@ -9,14 +9,8 @@
 #ifndef AK_VISUALIZED_MODEL
 #define AK_VISUALIZED_MODEL
 
-class AKVisualizedModel {
-
-private:
-    bool _isVisible;
-
-public:
-    bool isVisible() { return _isVisible; }
-    void setVisible(bool visible) { _isVisible = visible; }
+struct AKVisualizedModel {
+    bool isVisible;
 };
 
 #endif
