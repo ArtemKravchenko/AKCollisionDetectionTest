@@ -17,6 +17,8 @@ class AKPhysicsUtils {
 public:
     // Newtown laws
     void changeParticlePlaceInTime(AKParticle *particle);
+    void changeVelocityAfterCollisionTwoParticles(AKParticle *particle1, AKParticle2 *particle2);
+    void changeVelocityAfterCollisionParticleAndBound(AKParticle *particle, double bound);
 };
 
 #endif
