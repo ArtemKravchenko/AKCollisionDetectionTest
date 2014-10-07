@@ -8,31 +8,27 @@ using namespace std;
 template <typename Key>
 class AKPriorityQueue
 {
-    struct AKNode {
-        Key *key;
-        AKNode *parent;
-        AKNode *leftChild;
-        AKNode *rightChild;
-    };
 private:
-    // Tree implementation
-    AKNode *root;
-    AKNode *last;
-    // Vector implementation
-    std::vector<Key> *vectorOfElements;
-    // Array implementation
-    int N = 0;
-    Key* arrayOfElements[];
-    bool less(int i, int j);
-    void exch(int i, int j);
-    void swim(int k);
-    void sink(int k);
+    unsigned int N = 0;
+    Key* _arrayOfElements[];
+    bool less(unsigned int i, unsigned int j);
+    void exch(unsigned int i, unsigned int j);
+    void swim(unsigned int k);
+    void sink(unsigned int k);
+    void deleteElement(unsigned int k);
 public:
     AKPriorityQueue();
-    void    insert(Key *v);
-    int     size();
-    bool    isEmpty();
-    Key*    delMax();
+    AKPriorityQueue(unsigned int capacity);
+    ~AKPriorityQueue();
+    unsigned int  size();
+    void insert(Key *v);
+    bool isEmpty();
+    Key* delMin();
+    void deleteElement(Key *key);
+};
+
+struct AKCompatibleToQueue {
+    unsigned int index;
 };
 
 #endif // AKPRIORITYQUEUE_H

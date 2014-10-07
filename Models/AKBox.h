@@ -11,6 +11,7 @@
 
 #include "AKVisualizedModel.h"
 #include "AKRectangle.h"
+#include "akpriorityqueue.h"
 
 struct AKBox : public AKVisualizedModel {
     AKRectangle     *rectangle;
