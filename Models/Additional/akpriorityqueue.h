@@ -2,15 +2,15 @@
 #define AKPRIORITYQUEUE_H
 
 #include <vector>
+#include "akevent.h"
 
 using namespace std;
 
-template <typename Key>
 class AKPriorityQueue
 {
 private:
     unsigned int N = 0;
-    Key* _arrayOfElements[];
+    AKEvent **_arrayOfElements;
     bool less(unsigned int i, unsigned int j);
     void exch(unsigned int i, unsigned int j);
     void swim(unsigned int k);
@@ -21,14 +21,11 @@ public:
     AKPriorityQueue(unsigned int capacity);
     ~AKPriorityQueue();
     unsigned int  size();
-    void insert(Key *v);
+    void insert(AKEvent* v);
     bool isEmpty();
-    Key* delMin();
-    void deleteElement(Key *key);
-};
-
-struct AKCompatibleToQueue {
-    unsigned int index;
+    AKEvent* delMin();
+    void deleteElement(AKEvent* key);
+    void deleteElementForParticle(AKParticle*);
 };
 
 #endif // AKPRIORITYQUEUE_H

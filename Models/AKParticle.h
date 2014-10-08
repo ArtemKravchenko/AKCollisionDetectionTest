@@ -11,9 +11,8 @@
 
 #include "AKShape.h"
 #include "AKSphere.h"
-#include "akpriorityqueue.h"
 
-struct AKParticle : public AKShape, AKCompatibleToQueue  {
+struct AKParticle : public AKShape  {
     AKSphere    *sphere;
     double      mass;
     double      localTime;

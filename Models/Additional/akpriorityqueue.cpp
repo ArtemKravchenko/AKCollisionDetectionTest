@@ -3,74 +3,76 @@
 static unsigned int const defaultSize = 100;
 
 // CONSTRUCTORS
-template <typename Key>
-AKPriorityQueue<Key>::AKPriorityQueue()
+AKPriorityQueue::AKPriorityQueue()
 {
-    _arrayOfElements = new unsigned int[defaultSize];
+    _arrayOfElements = new AKEvent*[defaultSize];
 }
-template <typename Key>
-AKPriorityQueue<Key>::AKPriorityQueue(unsigned int capacity)
+AKPriorityQueue::AKPriorityQueue(unsigned int capacity)
 {
-    _arrayOfElements   = new unsigned int[capacity*capacity + 1];
+    _arrayOfElements = new AKEvent*[capacity*capacity + 1];
 }
-template <typename Key>
-AKPriorityQueue<Key>::~AKPriorityQueue()
+AKPriorityQueue::~AKPriorityQueue()
 {
     delete [] _arrayOfElements;
     _arrayOfElements = nullptr;
 }
 // PUBLIC METHODS
-template <typename Key>
-bool AKPriorityQueue<Key>::isEmpty()
+bool AKPriorityQueue::isEmpty()
 {
     return N == 0;
 }
-template <typename Key>
-unsigned int AKPriorityQueue<Key>::size()
+unsigned int AKPriorityQueue::size()
 {
     return N;
 }
-template <typename Key>
-void AKPriorityQueue<Key>::insert(Key *key)
+void AKPriorityQueue::insert(AKEvent *key)
 {
     _arrayOfElements[++N] = key;
-    ((AKCompatibleToQueue*)_arrayOfElements[N])->index = N;
+    _arrayOfElements[N]->index = N;
     swim(N);
 }
-template <typename Key>
-Key* AKPriorityQueue<Key>::delMin()
+AKEvent* AKPriorityQueue::delMin()
 {
-    Key min = _arrayOfElements[1];
+    AKEvent *min = _arrayOfElements[1];
     exch(1, N--);
     _arrayOfElements[N+1] = nullptr;
     sink(1);
     return min;
 }
-template <typename Key>
-void AKPriorityQueue<Key>::deleteElement(Key *key)
+void AKPriorityQueue::deleteElement(AKEvent *key)
 {
-    unsigned int k = ((AKCompatibleToQueue*)key)->index;
+    unsigned int k = key->index;
     deleteElement(k);
 }
-// PRIVATE METHODS
-template <typename Key>
-bool AKPriorityQueue<Key>::less(unsigned int i, unsigned int j)
+void AKPriorityQueue::deleteElementForParticle(AKParticle* particle)
 {
-    return _arrayOfElements[i].compareTo(_arrayOfElements[j]) < 0;
+    AKEvent *event;
+    for (int i = 0; i < N; i++) {
+        event = _arrayOfElements[i];
+        if (event->firstParticle == particle ||
+            event->secondParticle == particle) {
+            deleteElement(event);
+            N--;
+            i++;
+        }
+    }
 }
-template <typename Key>
-void AKPriorityQueue<Key>::exch(unsigned int i, unsigned int j)
+// PRIVATE METHODS
+bool AKPriorityQueue::less(unsigned int i, unsigned int j)
+{
+    return _arrayOfElements[i]->timeToEvent < _arrayOfElements[j]->timeToEvent;
+}
+void AKPriorityQueue::exch(unsigned int i, unsigned int j)
 {
     // Workaround
-    ((AKCompatibleToQueue*)_arrayOfElements[i])->index = j;
-    ((AKCompatibleToQueue*)_arrayOfElements[j])->index = i;
+    _arrayOfElements[i]->index = j;
+    _arrayOfElements[j]->index = i;
     // Main flow
-    Key *t = _arrayOfElements[i];
+    AKEvent* t = _arrayOfElements[i];
     _arrayOfElements[i] = _arrayOfElements[j];
     _arrayOfElements[j] = t;
 }
-template <typename Key>
-void AKPriorityQueue<Key>::swim(unsigned int k)
+void AKPriorityQueue::swim(unsigned int k)
 {
     while (k > 1 && less(k/2, k))
     {
@@ -78,8 +80,7 @@ void AKPriorityQueue<Key>::swim(unsigned int k)
         k = k/2;
     }
 }
-template <typename Key>
-void AKPriorityQueue<Key>::sink(unsigned int k)
+void AKPriorityQueue::sink(unsigned int k)
 {
     while (2*k <= N)
     {
@@ -90,8 +91,7 @@ void AKPriorityQueue<Key>::sink(unsigned int k)
         k = j;
     }
 }
-template <typename Key>
-void AKPriorityQueue<Key>::deleteElement(unsigned int k)
+void AKPriorityQueue::deleteElement(unsigned int k)
 {
     exch(k, N--);
     _arrayOfElements[N+1] = nullptr;

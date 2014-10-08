@@ -11,25 +11,11 @@
 
 #include "AKCell.h"
 #include <vector>
-
-typedef enum {
-    AKEventParticleToParticleType,
-    AKEventParticleToBoundType,
-    AKEventParticleToCellType,
-} AKEventType;
+#include "akpriorityqueue.h"
+#include "akevent.h"
 
 using std::vector;
-
-struct AKEvent {
-    AKEventType     eventType;
-    AKParticle      *firstParticle;
-    AKParticle      *secondParticle;
-    double          measure;
-    double          timeToEvent;
-};
-
-typedef vector<AKCell*>     AKCellsList;
-typedef vector<AKEvent*>    AKEventsList;
+typedef vector<AKCell*>             AKCellsList;
 
 class AKCollisionDetectionLogic {
     
@@ -37,10 +23,10 @@ private:
     /* ----------------------------- VARIABLES ----------------------------- */
     bool                _isBoundsAlreadySet = false;    // Flag manage is bounds was already set
     bool                _isParticlesAlreadySet = false; // Flag manage is particles was already set
-    AKBox               *_bounds;                       // bounds of system
-    AKParticlesList     *_particleList;                 // list of particles
-    AKEventsList        *_eventsList;                   // list of events
-    AKCellsList         *_cellList;                     // list of cells
+    AKBox               *_bounds;                       // Bounds of system
+    AKParticlesList     *_particleList;                 // List of particles
+    AKPriorityQueue     *_eventsQueue;                  // Queue of events
+    AKCellsList         *_cellList;                     // List of cells
     int                 _cellsCountInRow;               // Number of cells in each imaginary row
     int                 _cellsCountInCol;               // Number of cells in each imaginary column
     int                 _cellsCountInRange;             // Number of cells in each imaginary range

@@ -24,7 +24,7 @@ void AKCollisionDetectionLogic::fillEventsInQueue()
     unsigned int                     particlesCount = _particleList->size() & INT_MAX;
     unsigned int                     cellIndex;
     AKCell                  *cell;
-    _eventsList = new AKEventsList();
+    _eventsQueue = new AKPriorityQueue();
     _cellList = new AKCellsList();
     _timeTotal = 0;
     _error = 0.000000001;
@@ -52,7 +52,7 @@ void AKCollisionDetectionLogic::fillEventsInQueue()
             // 2. Compute events with particles inside current cell and bound of cell
             box = cell->bounds;
             event = getEvent(firstParticle, box);
-            _eventsList->push_back(event);
+            _eventsQueue->insert(event);
             // 3. Compute events with particles inside current cell and neighbor cell
             neighborsIndexes = cell->neighbors;
             addEventsForParticleAndParticlesInNeighborCells(firstParticle, neighborsIndexes);
@@ -109,8 +109,7 @@ void AKCollisionDetectionLogic::setBound(AKBox* bounds, unsigned int row, unsign
 /* -------------------  PRIVATE FUNCTIONS ------------------- */
 inline AKEvent* AKCollisionDetectionLogic::nextEventFromListEvents()
 {
-    // TODO: Need to implement
-    return nullptr;
+    return _eventsQueue->delMin();
 }
 inline int AKCollisionDetectionLogic::indexOfCellForParticle(AKParticle const * particle)
 {
@@ -215,7 +214,7 @@ inline void AKCollisionDetectionLogic::addEventsForParticleAndParticlesInCurrent
         secondParticle = particlesList->at(i);
         if (particle != secondParticle) {
             event = getEvent(particle, secondParticle);
-            _eventsList->push_back(event);
+            _eventsQueue->insert(event);
         }
     }
 }
@@ -233,7 +232,7 @@ inline void AKCollisionDetectionLogic::addEventsForParticleAndParticlesInNeighbo
         for (int j = 0; j < particlesCount; j++) {
             secondParticle = particlesList->at(j);
             event = getEvent(particle, secondParticle);
-            _eventsList->push_back(event);
+            _eventsQueue->insert(event);
         }
     }
 }
@@ -313,23 +312,13 @@ inline void AKCollisionDetectionLogic::addEventsRelatedToParticle(AKParticle* pa
     addEventsForParticleAndParticlesInCurrentCell(particle, cell, 0);
     box = cell->bounds;
     event = getEvent(particle, box);
-    _eventsList->push_back(event);
+    _eventsQueue->insert(event);
     neighborsIndexes = cell->neighbors;
     addEventsForParticleAndParticlesInNeighborCells(particle, neighborsIndexes);
 }
-inline void AKCollisionDetectionLogic::removeEventsForParticle(AKParticle* particle)
+inline void AKCollisionDetectionLogic::removeEventsForParticle(AKParticle* particle) // O(n)
 {
-    int index = 0;
-    AKEvent *event = _eventsList->at(index);
-    while (true) {
-        if (isEventContainsParticle(event, particle)) {
-            _eventsList->erase(_eventsList->begin() + index);
-        } else {
-            if (++index == _eventsList->size()) {
-                return;
-            }
-        }
-    }
+    _eventsQueue->deleteElementForParticle(particle);
 }
 inline bool AKCollisionDetectionLogic::isEventContainsParticle(AKEvent *event, AKParticle* particle)
 {
