@@ -256,6 +256,8 @@ inline void AKCollisionDetectionLogic::handleParticleToParticleCollisionEvent()
     AKParticle *p2 = _nextEvent->secondParticle;
     AKPhysicsUtils::getInstance().changeParticleVelocityAfterCollisionWithAnotherParticle(p1, p2);
     // 2
+    // TODO: don't need to remove events in case when
+    //       just need to change time for events in which particles take participation
     removeEventsForParticle(p1);
     removeEventsForParticle(p2);
     // 3
