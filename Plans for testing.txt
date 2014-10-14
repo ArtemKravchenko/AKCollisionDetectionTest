@@ -1,0 +1,83 @@
+				CLASSES THAT NEED TO BE TESTED
+1.) AKPhysicsUtils
+2.) AKGeometricUtils
+3.) AKPriorityQueue
+4.) AKCollisionDetectionLogic
+				DESCRIPTION FOR IMPLEMENTATION (TEST DATA)
+	
+1.1) changeParticlePlaceInTime: // FORMULA: OUTPUT(time) = center + velocity * (time - localTime)
+	INPUT: center(1,1), velocity(1, 1), localTime(0), time(1)		OUTPUT: center(2,2)
+	INPUT: center(25,15), velocity(8, 17), localTime(10), time(32)	OUTPUT: center(201,389)
+	INPUT: center(152,83), velocity(47, 71) localTime(51), time(84) OUTPUT: center(1703,2426)
+1.2) changeParticleVelocityAfterCollisionWithAnotherParticle // FORMULA: OUTPUT1(v1,d1,d2,m1,m2) = v1 + (2*m2*(v2 - v1)*(d2-d1)/(m1+m2)*(d2-d1)*(d2-d1))
+																		 OUTPUT2(v2,d1,d2,m1,m2) = v2 - (2*m1*(v2 - v1)*(d2-d1)/(m1+m2)*(d2-d1)*(d2-d1))
+	INPUT: v1(1,1), v2(1,1), d1(51,51), d2(1,1), m1(1), m2(1)					OUTPUT1: v1(1,1)
+																				OUTPUT2: v2(1,1)															
+	INPUT: v1(15,83), v2(17,48), d1(47,105), d2(72,53), m1(10), m2(15)			OUTPUT1: v1(15.04,85.21)
+																				OUTPUT2: v2(16.97,46.52)
+	INPUT: v1(105,383), v2(217,148), d1(487,305), d2(720,153), m1(60), m2(105)	OUTPUT1: v1(104.21,383.52)
+																				OUTPUT2: v2(217.44,147.69)																	
+1.3) changeParticleVelocityAfterCollisionWithBound
+
+/---------------------------------------------------------------/
+2.1) getTimeToCollisionBetweenTwoParticles
+
+2.2) getTimeToCollisionBetweenParticleAndBound
+
+/---------------------------------------------------------------/
+3.1) less
+
+3.2) exch
+
+3.3) swim
+
+3.4) sink
+
+3.5) deleteElement
+
+3.6) insert
+
+3.7) delMin
+
+3.8) deleteElement
+
+3.9) deleteElementForParticle
+
+/---------------------------------------------------------------/
+4.1) fillNeighborsForCell
+
+4.2) indexOfCellForParticle
+
+4.3) getEvent // between particle and particle
+
+4.4) getEvent // between particle and bound
+
+4.5) nextEventFromListEvents
+
+4.6) updateParticlesLocation
+
+4.7) addEventsForParticleAndParticlesInCurrentCell
+
+4.8) addEventsForParticleAndParticlesInNeighborCells
+
+4.9) handleParticleToParticleCollisionEvent
+
+4.10) handleParticleToBoundCollisionEvent
+
+4.11) handleParticleLeftCellCollisionEvent
+
+4.12) removeEventsForParticle
+
+4.13) addEventsRelatedToParticle
+
+4.14) isEventContainsParticle
+
+4.15) fillEventsInQueue
+
+4.16) updateEventQueueInTime
+
+4.17) setParticlesList
+
+4.18) setBound
+
+	
