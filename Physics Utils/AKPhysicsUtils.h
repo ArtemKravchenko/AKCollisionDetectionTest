@@ -25,7 +25,7 @@ public:
     // Newtown laws
     void changeParticlePlaceInTime(AKParticle *particle, double time);
     void changeParticleVelocityAfterCollisionWithAnotherParticle(AKParticle *particle1, AKParticle *particle2);
-    void changeParticleVelocityAfterCollisionWithBound(AKParticle* particle, double bound);
+    void changeParticleVelocityAfterCollisionWithBound(AKParticle* particle, Vector2d bound);
     // SINGLETON
     static AKPhysicsUtils& getInstance()
     {

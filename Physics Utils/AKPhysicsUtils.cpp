@@ -35,10 +35,23 @@ void AKPhysicsUtils::changeParticleVelocityAfterCollisionWithAnotherParticle(AKP
     *(particle1->velocity) = v1n;
     *(particle2->velocity) = v2n;
 }
-void AKPhysicsUtils::changeParticleVelocityAfterCollisionWithBound(AKParticle* particle, double bound)
+void AKPhysicsUtils::changeParticleVelocityAfterCollisionWithBound(AKParticle* particle, Vector2d bound)
 {
-    VectorXd    n,
-                v           = *(particle->velocity);
+    VectorXd    n;
+    if (bound[0] == 0) {
+        if (bound[1] == 0) {
+            n = Vector2d(1,0);
+        } else {
+            n = Vector2d(0,-1);
+        }
+    } else {
+        if (bound[1] == 0) {
+            n = Vector2d(0,1);
+        } else {
+            n = Vector2d(-1,0);
+        }
+    }
+    VectorXd    v           = *(particle->velocity);
     double      dotProduct  = v.dot(n);
     VectorXd    v1n = v - 2 * n * dotProduct;
     
