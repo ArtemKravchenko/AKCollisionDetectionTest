@@ -6,9 +6,9 @@
 				DESCRIPTION FOR IMPLEMENTATION (TEST DATA)
 	
 1.1) changeParticlePlaceInTime: // FORMULA: OUTPUT(time) = center + velocity * (time - localTime)
-	INPUT: center(1,1), velocity(1, 1), localTime(0), time(1)		OUTPUT: center(2,2)
-	INPUT: center(25,15), velocity(8, 17), localTime(10), time(32)	OUTPUT: center(201,389)
-	INPUT: center(152,83), velocity(47, 71) localTime(51), time(84) OUTPUT: center(1703,2426)
+	INPUT: center(1,1), velocity(1, 1), localTime(0), time(1)					OUTPUT: center(2,2)
+	INPUT: center(25,15), velocity(8, 17), localTime(10), time(32)				OUTPUT: center(201,389)
+	INPUT: center(152,83), velocity(47, 71) localTime(51), time(84) 			OUTPUT: center(1703,2426)
 1.2) changeParticleVelocityAfterCollisionWithAnotherParticle // FORMULA: OUTPUT1(v1,d1,d2,m1,m2) = v1 + (2*m2*(v2 - v1)*(d2-d1)/(m1+m2)*(d2-d1)*(d2-d1))
 																		 OUTPUT2(v2,d1,d2,m1,m2) = v2 - (2*m1*(v2 - v1)*(d2-d1)/(m1+m2)*(d2-d1)*(d2-d1))
 	INPUT: v1(1,1), v2(1,1), d1(51,51), d2(1,1), m1(1), m2(1)					OUTPUT1: v1(1,1)
@@ -17,22 +17,38 @@
 																				OUTPUT2: v2(16.97,46.52)
 	INPUT: v1(105,383), v2(217,148), d1(487,305), d2(720,153), m1(60), m2(105)	OUTPUT1: v1(104.21,383.52)
 																				OUTPUT2: v2(217.44,147.69)																	
-1.3) changeParticleVelocityAfterCollisionWithBound
+1.3) changeParticleVelocityAfterCollisionWithBound // FORMULA: OUTPUT(v, n) = v - 2*n(v*n)
+	INPUT: v(1,1), n(-1,0)														OUTPUT: v(-1,1)
+	INPUT: v(-10,20), n(1,0)													OUTPUT: v(10, 20)
+	INPUT: v(15,38), n(0, -1)													OUTPUT: v(15, -38)
+	INPUT: v(90,-61), n(0, 1)													OUTPUT: v(90, 61)
 
 /---------------------------------------------------------------/
-2.1) getTimeToCollisionBetweenTwoParticles
+2.1) getTimeToCollisionBetweenTwoParticles // FORMULA: CAN SKIP IF CLEAR REVIEW FORMULA
 
-2.2) getTimeToCollisionBetweenParticleAndBound
+2.2) getTimeToCollisionBetweenParticleAndBound // FORMULA: CAN SKIP IF CLEAR REVIEW FORMULA
 
 /---------------------------------------------------------------/
-3.1) less
-
-3.2) exch
-
-3.3) swim
-
-3.4) sink
-
+3.1) less // INITIAL VALUES [5, 13, 87, 27, 21, 61]
+	INPUT: (1), (0)																OUTPUT: false
+	INPUT: (4), (1)																OUTPUT: false
+	INPUT: (3), (5)																OUTPUT: true
+	INPUT: (3), (1)																OUTPUT: false
+	INPUT: (0), (2)																OUTPUT: true
+	
+3.2) exch // CAN SKIP IF CLEAR REVIEW FORMULA
+	
+3.3) swim // INITIAL VALUES [5, 13, 87, 27, 21, 61] (1,2,3,4,5,6)
+	INPUT: (3)																	OUTPUT: [87, 13, 5, 27, 21, 61]
+	INPUT: (5)																	OUTPUT: [87, 21, 5, 27, 13, 61]
+	INPUT: (4)																	OUTPUT: [87, 27, 5, 21, 13, 61]
+3.4) sink // INITIAL VALUES [5, 13, 87, 27, 21, 61] (1,2,3,4,5,6)
+	INPUT: (3)																	OUTPUT: [5, 13, 87, 27, 21, 61]
+	INPUT: (5)																	OUTPUT: [5, 13, 87, 27, 21, 61]
+	INPUT: (4)																	OUTPUT: [5, 13, 87, 27, 21, 61]
+	INPUT: (2)																	OUTPUT: [5, 27, 87, 13, 21, 61]
+	INPUT: (1)																	OUTPUT: [87, 27, 61, 13, 21, 5]
+	INPUT: (2)																	OUTPUT: [87, 27, 61, 13, 21, 5]
 3.5) deleteElement
 
 3.6) insert
