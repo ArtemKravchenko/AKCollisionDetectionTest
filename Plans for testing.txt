@@ -29,35 +29,41 @@
 2.2) getTimeToCollisionBetweenParticleAndBound // FORMULA: CAN SKIP IF CLEAR REVIEW FORMULA
 
 /---------------------------------------------------------------/
-3.1) less // INITIAL VALUES [5, 13, 87, 27, 21, 61]
+3.1) less 						// INITIAL VALUES [5, 13, 87, 27, 21, 61]
 	INPUT: (1), (0)																OUTPUT: false
 	INPUT: (4), (1)																OUTPUT: false
 	INPUT: (3), (5)																OUTPUT: true
 	INPUT: (3), (1)																OUTPUT: false
 	INPUT: (0), (2)																OUTPUT: true
 	
-3.2) exch // CAN SKIP IF CLEAR REVIEW FORMULA
+3.2) exch 						// CAN SKIP IF CLEAR REVIEW FORMULA
 	
-3.3) swim // INITIAL VALUES [5, 13, 87, 27, 21, 61] (1,2,3,4,5,6)
+3.3) swim 						// INITIAL VALUES [5, 13, 87, 27, 21, 61] (1,2,3,4,5,6)
 	INPUT: (3)																	OUTPUT: [87, 13, 5, 27, 21, 61]
 	INPUT: (5)																	OUTPUT: [87, 21, 5, 27, 13, 61]
 	INPUT: (4)																	OUTPUT: [87, 27, 5, 21, 13, 61]
-3.4) sink // INITIAL VALUES [5, 13, 87, 27, 21, 61] (1,2,3,4,5,6)
+3.4) sink 						// INITIAL VALUES [5, 13, 87, 27, 21, 61] (1,2,3,4,5,6)
 	INPUT: (3)																	OUTPUT: [5, 13, 87, 27, 21, 61]
 	INPUT: (5)																	OUTPUT: [5, 13, 87, 27, 21, 61]
 	INPUT: (4)																	OUTPUT: [5, 13, 87, 27, 21, 61]
 	INPUT: (2)																	OUTPUT: [5, 27, 87, 13, 21, 61]
 	INPUT: (1)																	OUTPUT: [87, 27, 61, 13, 21, 5]
 	INPUT: (2)																	OUTPUT: [87, 27, 61, 13, 21, 5]
-3.5) deleteElement
+3.5) deleteElement 				// INITIAL VALUES [5, 13, 87, 27, 21, 61] (1,2,3,4,5,6)
+	INPUT: (4)																	OUTPUT: [61, 5, 87, 13, 21, 0]
+	INPUT: (1)																	OUTPUT: [87, 5, 21, 13, 0, 0]
+	INPUT: (3)																	OUTPUT: [87, 5, 13, 0, 0, 0]
+3.6) insert						// INITIAL VALUES [5, 13, 87, 27, 21, 61] (1,2,3,4,5,6)
+	INPUT: (14)																	OUTPUT: [5, 13, 87, 27, 21, 61, 14]
+	INPUT: (102)                                                                OUTPUT: [102, 5, 87, 13, 21, 61, 14, 27]
+	INPUT: (73)                                                                 OUTPUT: [102, 73, 87, 5, 21, 61, 14, 27, 13]
+3.7) delMax 					// INITIAL VALUES [5, 13, 87, 27, 21, 61] (1,2,3,4,5,6)
+	INPUT: ()																	OUTPUT: [87, 13, 61, 27, 21, 0]
+	INPUT: ()                                                                	OUTPUT: [61, 13, 21, 27, 0, 0]
+	INPUT: ()                                                                	OUTPUT: [27, 13, 21, 0, 0, 0]
+3.8) deleteElement				// INITIAL VALUES [5, 13, 87, 27, 21, 61] (1,2,3,4,5,6) // JUST NEED CLEARLY REVIEW CODE OF FORMULA
 
-3.6) insert
-
-3.7) delMin
-
-3.8) deleteElement
-
-3.9) deleteElementForParticle
+3.9) deleteElementForParticle	// INITIAL VALUES [5, 13, 87, 27, 21, 61] (1,2,3,4,5,6) // JUST NEED CLEARLY REVIEW CODE OF FORMULA
 
 /---------------------------------------------------------------/
 4.1) fillNeighborsForCell
