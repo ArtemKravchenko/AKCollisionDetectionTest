@@ -22,7 +22,7 @@ struct AKEvent {
     AKEventType     eventType;
     AKParticle      *firstParticle;
     AKParticle      *secondParticle;
-    double          measure;
+    double          measure; // TODO : Need to change type of variable from double to VectorXd
     double          timeToEvent;
     unsigned        int index;
 };

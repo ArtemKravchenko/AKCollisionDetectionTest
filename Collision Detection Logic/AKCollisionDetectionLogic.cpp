@@ -124,7 +124,6 @@ inline int AKCollisionDetectionLogic::indexOfCellForParticle(AKParticle const * 
         int indexZ = static_cast<int>(pointZ / _cellDepth);
         returnIndex = indexZ * _cellsCountInCol * _cellsCountInRow + indexY * _cellsCountInRow + indexX;
     }
-    return returnIndex;
 }
 void AKCollisionDetectionLogic::fillNeighborsForCell(AKCell *cell, int index)
 {
@@ -243,6 +242,7 @@ inline void AKCollisionDetectionLogic::updateParticlesLocation()
     for (unsigned int i = 0; i < particlesCount; i++) {
         currentParticle = _particleList->at(i);
     }
+	// TODO: Need to implement
 }
 inline void AKCollisionDetectionLogic::handleParticleToParticleCollisionEvent()
 {

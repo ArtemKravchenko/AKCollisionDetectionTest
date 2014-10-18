@@ -66,40 +66,52 @@
 3.9) deleteElementForParticle	// INITIAL VALUES [5, 13, 87, 27, 21, 61] (1,2,3,4,5,6) // JUST NEED CLEARLY REVIEW CODE OF FORMULA
 
 /---------------------------------------------------------------/
-4.1) fillNeighborsForCell
+4.1) fillNeighborsForCell		// INPUT VALUES row = 5, col = 6	
+	INPUT: (10)																	OUTPUT: [16,17,11,5]
+	INPUT: (13)																	OUTPUT: [19,20,14,8]
+	INPUT: (1)																	OUTPUT: [7,8,2,-1]
+	INPUT: (29)																	OUTPUT: [-1,-1,-1,-1]
+	INPUT: (24)																	OUTPUT: [-1,-1,25,19]
+	INPUT: (0)																	OUTPUT: [6,7,1,-1]
+	INPUT: (5)																	OUTPUT: [11,-1,-1,-1]
+	INPUT: (20)																	OUTPUT: [26,27,21,15]
+	INPUT: (6)																	OUTPUT: [12,13,7,1]
+4.2) indexOfCellForParticle		// INPUT VALUES cellWidth = 150, cellHeight = 130
+	INPUT: (370,156)															OUTPUT: 8
+	INPUT: (829,412)															OUTPUT: 23
+	INPUT: (471,34)																OUTPUT: 3
+	INPUT: (61,0)																OUTPUT: 0
+	INPUT: (511,351)															OUTPUT: 15
+4.3) getEvent // between particle and particle 	// NOTHING TO TEST
+	
+4.4) getEvent // between particle and bound		// NOTHING TO TEST
 
-4.2) indexOfCellForParticle
+4.5) nextEventFromListEvents					// NEED TO CLEARLY REVIEW CODE OF METHOD
 
-4.3) getEvent // between particle and particle
+4.6) updateParticlesLocation					// NEED TO CLEARLY REVIEW
 
-4.4) getEvent // between particle and bound
+4.7) addEventsForParticleAndParticlesInCurrentCell		// NEED TO CLEARLY REVIEW
 
-4.5) nextEventFromListEvents
+4.8) addEventsForParticleAndParticlesInNeighborCells 	// NEED TO CLEARLY REVIEW
 
-4.6) updateParticlesLocation
+4.9) handleParticleToParticleCollisionEvent				// NEED TO CLEARLY REVIEW 
 
-4.7) addEventsForParticleAndParticlesInCurrentCell
+4.10) handleParticleToBoundCollisionEvent				// NEED TO CLEARLY REVIEW
 
-4.8) addEventsForParticleAndParticlesInNeighborCells
+4.11) handleParticleLeftCellCollisionEvent				// NEED TO CLEARLY REVIEW
 
-4.9) handleParticleToParticleCollisionEvent
+4.12) removeEventsForParticle							// NEED TO CLEARLY REVIEW
 
-4.10) handleParticleToBoundCollisionEvent
+4.13) addEventsRelatedToParticle						// NEED TO CLEARLY REVIEW
 
-4.11) handleParticleLeftCellCollisionEvent
+4.14) isEventContainsParticle							// NEED TO CLEARLY REVIEW
 
-4.12) removeEventsForParticle
+4.15) fillEventsInQueue									// NEED TO CLEARLY REVIEW
 
-4.13) addEventsRelatedToParticle
+4.16) updateEventQueueInTime							// NEED TO CLEARLY REVIEW
 
-4.14) isEventContainsParticle
+4.17) setParticlesList									// NEED TO CLEARLY REVIEW
 
-4.15) fillEventsInQueue
-
-4.16) updateEventQueueInTime
-
-4.17) setParticlesList
-
-4.18) setBound
+4.18) setBound											// NEED TO CLEARLY REVIEW
 
 	
