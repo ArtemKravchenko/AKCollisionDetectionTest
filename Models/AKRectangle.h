@@ -15,8 +15,8 @@
 using namespace Eigen;
 
 struct AKRectangle : public AKShape  {
-    Eigen::VectorXd     *center;
-    Eigen::VectorXd     *radius;
+    Eigen::VectorXd     center;
+    Eigen::VectorXd     radius;
 };
 
 #endif

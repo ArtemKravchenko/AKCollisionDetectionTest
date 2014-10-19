@@ -15,12 +15,12 @@
 int AKGeometricUtils::getTimeToCollisionBetweenTwoParticles(AKParticle const *p1, AKParticle const *p2)
 {
     double time;
-    VectorXd v1 = *p1->velocity,
-            v2 = *p2->velocity,
-            r10 = *p1->sphere->center,
-            r20shift = *p2->sphere->center + (p1->localTime - p2->localTime)*(*p2->velocity),
+    VectorXd v1 = p1->velocity,
+            v2 = p2->velocity,
+            r10 = p1->sphere.center,
+            r20shift = p2->sphere.center + (p1->localTime - p2->localTime)*(p2->velocity),
             deltaV, deltaR;
-    double L = p1->sphere->radius + p2->sphere->radius,
+    double L = p1->sphere.radius + p2->sphere.radius,
             A, B, D;
     deltaV = v1 - v2;
     deltaR = r10 - r20shift;
@@ -33,26 +33,26 @@ int AKGeometricUtils::getTimeToCollisionBetweenTwoParticles(AKParticle const *p1
 int AKGeometricUtils::getTimeToCollisionBetweenParticleAndBound(AKParticle const *particle, double bound, AKCollisionCompareType type, bool isSystemBound, bool isGreaterMeasure)
 {
     double r1 = bound, r0, v;
-    double radius = (particle->sphere)->radius;
-    VectorXd *vectorC = (VectorXd*)particle->sphere->center;
-    VectorXd *vectorV = (VectorXd*)particle->velocity;
+    double radius = particle->sphere.radius;
+    VectorXd vectorC = particle->sphere.center;
+    VectorXd vectorV = particle->velocity;
     switch (type) {
         case AKCollisionCompareXType:
         {
-            r0 = (*vectorC)[0];
-            v =  (*vectorV)[0];
+            r0 = vectorC[0];
+            v =  vectorV[0];
         }
             break;
         case AKCollisionCompareYType:
         {
-            r0 = (*vectorC)[1];
-            v =  (*vectorV)[1];
+            r0 = vectorC[1];
+            v =  vectorV[1];
         }
             break;
         case AKCollisionCompareZType:
         {
-            r0 = (*vectorC)[2];
-            v =  (*vectorV)[2];
+            r0 = vectorC[2];
+            v =  vectorV[2];
         }
             break;
         default:

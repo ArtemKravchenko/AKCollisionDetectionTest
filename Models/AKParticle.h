@@ -13,10 +13,10 @@
 #include "AKSphere.h"
 
 struct AKParticle : public AKShape  {
-    AKSphere    *sphere;
+    AKSphere    sphere;
     double      mass;
     double      localTime;
-    VectorXd    *velocity;
+    VectorXd    velocity;
 };
 
 #endif

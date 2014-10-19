@@ -15,8 +15,8 @@
 using namespace Eigen;
 
 struct AKSphere : public AKShape {
-    Eigen::VectorXd     *center;
-    int                 radius;
+    Eigen::VectorXd      center;
+    double               radius;
 };
 
 #endif

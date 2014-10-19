@@ -9,6 +9,7 @@ using namespace std;
 class AKPriorityQueue
 {
 private:
+public:
     unsigned int N = 0;
     AKEvent **_arrayOfElements;
     bool less(unsigned int i, unsigned int j);
@@ -16,7 +17,7 @@ private:
     void swim(unsigned int k);
     void sink(unsigned int k);
     void deleteElement(unsigned int k);
-public:
+    // -- -- //
     AKPriorityQueue();
     AKPriorityQueue(unsigned int capacity);
     ~AKPriorityQueue();

@@ -124,6 +124,7 @@ inline int AKCollisionDetectionLogic::indexOfCellForParticle(AKParticle const * 
         int indexZ = static_cast<int>(pointZ / _cellDepth);
         returnIndex = indexZ * _cellsCountInCol * _cellsCountInRow + indexY * _cellsCountInRow + indexX;
     }
+    return returnIndex;
 }
 void AKCollisionDetectionLogic::fillNeighborsForCell(AKCell *cell, int index)
 {
@@ -274,7 +275,8 @@ inline void AKCollisionDetectionLogic::handleParticleToBoundCollisionEvent()
     // 1
     AKParticle *particle = _nextEvent->firstParticle;
     double measure = _nextEvent->measure;
-    AKPhysicsUtils::getInstance().changeParticleVelocityAfterCollisionWithBound(particle, measure);
+    Vector2d tmp;
+    AKPhysicsUtils::getInstance().changeParticleVelocityAfterCollisionWithBound(particle, tmp);
     // 2
     removeEventsForParticle(particle);
     // 3

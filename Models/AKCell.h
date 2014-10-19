@@ -16,8 +16,8 @@
 typedef std::vector<AKParticle*> AKParticlesList;
 
 struct AKCell : public AKShape {
-    AKBox               *bounds;
-    AKParticlesList     *insideParticles;
+    AKBox               bounds;
+    AKParticlesList     insideParticles;
     unsigned int        neighbors[4];
     unsigned int        index;
     

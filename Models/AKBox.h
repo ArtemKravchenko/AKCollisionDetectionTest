@@ -13,7 +13,7 @@
 #include "AKRectangle.h"
 
 struct AKBox : public AKVisualizedModel {
-    AKRectangle     *rectangle;
+    AKRectangle     rectangle;
 };
 
 #endif

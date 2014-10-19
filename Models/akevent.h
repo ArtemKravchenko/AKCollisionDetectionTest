@@ -20,9 +20,9 @@ typedef enum {
 
 struct AKEvent {
     AKEventType     eventType;
-    AKParticle      *firstParticle;
-    AKParticle      *secondParticle;
-    double          measure; // TODO : Need to change type of variable from double to VectorXd
+    AKParticle      firstParticle;
+    AKParticle      secondParticle;
+    VectorXd        measure;
     double          timeToEvent;
     unsigned        int index;
 };
