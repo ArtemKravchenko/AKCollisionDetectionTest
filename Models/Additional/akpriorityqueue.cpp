@@ -10,6 +10,7 @@ AKPriorityQueue::AKPriorityQueue()
 AKPriorityQueue::AKPriorityQueue(unsigned int capacity)
 {
     _arrayOfElements = new AKEvent*[capacity*capacity + 1];
+    N = capacity;
 }
 AKPriorityQueue::~AKPriorityQueue()
 {
@@ -75,7 +76,7 @@ void AKPriorityQueue::exch(unsigned int i, unsigned int j)
 }
 void AKPriorityQueue::swim(unsigned int k)
 {
-    while (k > 1 && less(k/2, k))
+    while (k > 1 && less(k, k/2))
     {
         exch(k/2, k);
         k = k/2;
@@ -86,8 +87,8 @@ void AKPriorityQueue::sink(unsigned int k)
     while (2*k <= N)
     {
         unsigned int j = 2*k;
-        if (j < N && less(j, j+1)) j++;
-        if (!less(k, j)) break;
+        if (j < N && less(j+1, j)) j++;
+        if (!less(j, k)) break;
         exch(k, j);
         k = j;
     }
