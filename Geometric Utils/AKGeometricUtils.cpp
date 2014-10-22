@@ -11,48 +11,54 @@
 #include "AKGeometricUtils.h"
 #include "AKSphere.h"
 #include "AKException.h"
+#include "AKDefines.h"
 
-int AKGeometricUtils::getTimeToCollisionBetweenTwoParticles(AKParticle const *p1, AKParticle const *p2)
+double AKGeometricUtils::getTimeToCollisionBetweenTwoParticles(AKParticle const *p1, AKParticle const *p2)
 {
-    double time;
-    VectorXd v1 = p1->velocity,
-            v2 = p2->velocity,
-            r10 = p1->sphere.center,
-            r20shift = p2->sphere.center + (p1->localTime - p2->localTime)*(p2->velocity),
-            deltaV, deltaR;
+    
+    DIMENSION_FROM_BOOL(p1->is2Ddimension, count)
+    // p1->sphere.center --> r10
+    double tmpR20shift[count];
+    for (int i = 0; i < count; i++) {
+        tmpR20shift[i] = p2->sphere.center[i] + (p1->localTime - p2->localTime)*((p2->velocity)[i]);
+    }
+    // tmpR20shift --> r20shift
+    // p1->velocity --> v1
+    // p2->velocity --> v2
+    double *deltaV = new double[count], *deltaR = new double[count];
     double L = p1->sphere.radius + p2->sphere.radius,
-            A, B, D;
-    deltaV = v1 - v2;
-    deltaR = r10 - r20shift;
-    A = deltaV.dot(deltaV);
-    B = -(deltaR.dot(deltaV));
-    D = B*B - A*((deltaR.dot(deltaR)) - L*L);
-    time = (B - sqrtl(D)) / A;
+            A, B, D, deltaRSquare;
+    VECTOR_DIFERRENCE_FOR_ARRAYS(p1->velocity, p2->velocity, deltaV, count)
+    VECTOR_DIFERRENCE_FOR_ARRAYS(p1->sphere.center , tmpR20shift, deltaR, count)
+    DOT_PRODUCT_FOR_ARRAYS(deltaV, deltaV, A, count)
+    DOT_PRODUCT_FOR_ARRAYS(deltaR, deltaV, B, count) // B = -(deltaR.dot(deltaV));
+    B = 0 - B;
+    DOT_PRODUCT_FOR_ARRAYS(deltaR, deltaR, deltaRSquare, count)
+    D = B*B - A*(deltaRSquare - L*L);
+    double time = (B - sqrtl(D)) / A;
     return time;
 }
-int AKGeometricUtils::getTimeToCollisionBetweenParticleAndBound(AKParticle const *particle, double bound, AKCollisionCompareType type, bool isSystemBound, bool isGreaterMeasure)
+double AKGeometricUtils::getTimeToCollisionBetweenParticleAndBound(AKParticle const *particle, double bound, AKCollisionCompareType type, bool isSystemBound, bool isGreaterMeasure)
 {
     double r1 = bound, r0, v;
     double radius = particle->sphere.radius;
-    VectorXd vectorC = particle->sphere.center;
-    VectorXd vectorV = particle->velocity;
     switch (type) {
         case AKCollisionCompareXType:
         {
-            r0 = vectorC[0];
-            v =  vectorV[0];
+            r0 = particle->sphere.center[0];
+            v =  particle->velocity[0];
         }
             break;
         case AKCollisionCompareYType:
         {
-            r0 = vectorC[1];
-            v =  vectorV[1];
+            r0 = particle->sphere.center[1];
+            v =  particle->velocity[1];
         }
             break;
         case AKCollisionCompareZType:
         {
-            r0 = vectorC[2];
-            v =  vectorV[2];
+            r0 = particle->sphere.center[2];
+            v =  particle->velocity[2];
         }
             break;
         default:

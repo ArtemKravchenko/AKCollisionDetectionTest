@@ -51,8 +51,8 @@ void AKPriorityQueue::deleteElementForParticle(AKParticle* particle)
     for (int i = 0; i < N; i++) {
         event = _arrayOfElements[i];
         // TODO: Need to clearly recheck
-        if (&(event->firstParticle) == particle ||
-            &(event->secondParticle) == particle) {
+        if ((event->firstParticle) == particle ||
+            (event->secondParticle) == particle) {
             deleteElement(event);
             N--;
             i++;

@@ -8,6 +8,7 @@
 
 #ifndef AKCollisionDetectionTest_AKException_h
 #define AKCollisionDetectionTest_AKException_h
+#include <exception>
 
 class wrongEventTypeException: public std::exception
 {

@@ -13,4 +13,3 @@ int main(int argc, const char * argv[]) {
     std::cout << "Hello, World!\n";
     return 0;
 }
-// TODO: Need to write unit test

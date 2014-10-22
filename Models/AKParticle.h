@@ -16,7 +16,7 @@ struct AKParticle : public AKShape  {
     AKSphere    sphere;
     double      mass;
     double      localTime;
-    VectorXd    velocity;
+    double      *velocity;
 };
 
 #endif

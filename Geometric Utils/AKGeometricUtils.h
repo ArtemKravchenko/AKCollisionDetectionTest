@@ -28,8 +28,8 @@ private:
     void operator=(AKGeometricUtils const&); // Don't implement
     
 public:
-    int getTimeToCollisionBetweenTwoParticles(AKParticle const *p1, AKParticle const *p2);
-    int getTimeToCollisionBetweenParticleAndBound(AKParticle const *particle, double bound, AKCollisionCompareType type, bool isSystemBound, bool isGreaterMeasure);
+    double getTimeToCollisionBetweenTwoParticles(AKParticle const *p1, AKParticle const *p2);
+    double getTimeToCollisionBetweenParticleAndBound(AKParticle const *particle, double bound, AKCollisionCompareType type, bool isSystemBound, bool isGreaterMeasure);
     // SINGLETON
     static AKGeometricUtils& getInstance()
     {

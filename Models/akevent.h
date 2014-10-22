@@ -20,9 +20,9 @@ typedef enum {
 
 struct AKEvent {
     AKEventType     eventType;
-    AKParticle      firstParticle;
-    AKParticle      secondParticle;
-    VectorXd        measure;
+    AKParticle      *firstParticle;
+    AKParticle      *secondParticle;
+    int             *measure;
     double          timeToEvent;
     unsigned        int index;
 };

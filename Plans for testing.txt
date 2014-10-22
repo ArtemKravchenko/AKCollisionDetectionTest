@@ -12,7 +12,7 @@
 1.2) changeParticleVelocityAfterCollisionWithAnotherParticle // FORMULA: OUTPUT1(v1,d1,d2,m1,m2) = v1 + (2*m2*(v2 - v1)*(d2-d1)/(m1+m2)*(d2-d1)*(d2-d1))
 								         								 OUTPUT2(v2,d1,d2,m1,m2) = v2 - (2*m1*(v2 - v1)*(d2-d1)/(m1+m2)*(d2-d1)*(d2-d1))
 	INPUT: v1(1,1), v2(1,1), d1(51,51), d2(1,1), m1(1), m2(1)					OUTPUT1: v1(1,1) OUTPUT2: v2(1,1)						
-	INPUT: v1(15,83), v2(17,48), d1(47,105), d2(72,53), m1(10), m2(15)			OUTPUT1: v1(17.4, 41.0) OUTPUT2: v2(15.4, 76.0)
+	INPUT: v1(15,83), v2(17,48), d1(47,105), d2(72,53), m1(10), m2(15)			OUTPUT1: v1(31.8..., 48.0...) OUTPUT2: v2(5.7..., 71.3...)
 	INPUT: v1(105,383), v2(217,148), d1(487,305), d2(720,153), m1(60), m2(105)	OUTPUT1: v1(247.54,83.9) OUTPUT2: v2(135.54,318.9)			
 1.3) changeParticleVelocityAfterCollisionWithBound // FORMULA: OUTPUT(v, n) = v - 2*n(v*n)
 	INPUT: v(1,1), n(0, 1)														OUTPUT: v(1, -1)

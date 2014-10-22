@@ -9,14 +9,11 @@
 #ifndef AK_RECTANGLE
 #define AK_RECTANGLE
 
-#include <Eigen/Dense>
 #include "AKShape.h"
 
-using namespace Eigen;
-
 struct AKRectangle : public AKShape  {
-    Eigen::VectorXd     center;
-    Eigen::VectorXd     radius;
+    double*     center;
+    double*     radius;
 };
 
 #endif

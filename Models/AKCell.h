@@ -17,18 +17,23 @@ typedef std::vector<AKParticle*> AKParticlesList;
 
 struct AKCell : public AKShape {
     AKBox               bounds;
-    AKParticlesList     insideParticles;
-    unsigned int        neighbors[4];
+    AKParticlesList     *insideParticles;
+    int        neighbors[4];
     unsigned int        index;
     
-    void addParticle(AKParticle* particle) { insideParticles->push_back(particle); }
-    void addNeighbors(int neighbors[4])
+    void addParticle(AKParticle* particle)
     {
-        insideParticles = new AKParticlesList();
-        neighbors[0] = neighbors[0];
-        neighbors[1] = neighbors[1];
-        neighbors[2] = neighbors[2];
-        neighbors[3] = neighbors[3];
+        if (insideParticles != nullptr) {
+            insideParticles = new AKParticlesList();
+        }
+        insideParticles->push_back(particle);
+    }
+    void addNeighbors(int array[4])
+    {
+        neighbors[0] = array[0];
+        neighbors[1] = array[1];
+        neighbors[2] = array[2];
+        neighbors[3] = array[3];
     }
 };
 

@@ -9,14 +9,11 @@
 #ifndef AK_SPHERE
 #define AK_SPHERE
 
-#include <Eigen/Dense>
 #include "AKShape.h"
 
-using namespace Eigen;
-
 struct AKSphere : public AKShape {
-    Eigen::VectorXd      center;
-    double               radius;
+    double*     center;
+    double      radius;
 };
 
 #endif
