@@ -18,23 +18,21 @@ using std::vector;
 typedef vector<AKCell*>             AKCellsList;
 
 class AKCollisionDetectionLogic {
-    
-private:
+
+protected:
     /* ------------------------------ METHODS ------------------------------ */
-    inline AKEvent* getEvent(AKParticle const * firstParticle, AKParticle const * secondParticle);
-    inline AKEvent* getEvent(AKParticle const * firstParticle, AKBox const * box);
-    inline AKEvent* nextEventFromListEvents();
-    inline void     updateParticlesLocation();
-    inline void     addEventsForParticleAndParticlesInCurrentCell(AKParticle *particle, AKCell* cell, unsigned int startIndex);
-    inline void     addEventsForParticleAndParticlesInNeighborCells(AKParticle *particle, const int *neighborsIndexes);
-    inline void     handleParticleToParticleCollisionEvent();
-    inline void     handleParticleToBoundCollisionEvent();
-    inline void     handleParticleLeftCellCollisionEvent();
-    inline void     removeEventsForParticle(AKParticle* particle);
-    inline void     addEventsRelatedToParticle(AKParticle* particle);
-    inline bool     isEventContainsParticle(AKEvent *event, AKParticle* particle);
-    
-public:
+    AKEvent* insertEventInQueue(AKParticle const * firstParticle, AKParticle const * secondParticle);
+    AKEvent* insertEventInQueue(AKParticle const * firstParticle, AKBox const * box);
+    AKEvent* nextEventFromListEvents();
+    void     updateParticlesLocation();
+    void     addEventsForParticleAndParticlesInCurrentCell(AKParticle *particle, AKCell* cell, unsigned int startIndex);
+    void     addEventsForParticleAndParticlesInNeighborCells(AKParticle *particle, const int *neighborsIndexes);
+    void     handleParticleToParticleCollisionEvent();
+    void     handleParticleToBoundCollisionEvent();
+    void     handleParticleLeftCellCollisionEvent();
+    void     removeEventsForParticle(AKParticle* particle);
+    void     addEventsRelatedToParticle(AKParticle* particle);
+    bool     isEventContainsParticle(AKEvent *event, AKParticle* particle);
     /* ----------------------------- VARIABLES ----------------------------- */
     bool                _isBoundsAlreadySet = false;    // Flag manage is bounds was already set
     bool                _isParticlesAlreadySet = false; // Flag manage is particles was already set
@@ -52,9 +50,11 @@ public:
     double              _timeTotal;                     // Counter of globale time
     double              _timeToEvent;                   // Time to event occurs
     double              _error;                         // Error of computations
+
+public:
     /* ------------------------------ METHODS ------------------------------ */
     void            fillNeighborsForCell(AKCell *cell,int index);
-    inline int      indexOfCellForParticle(AKParticle const * particle);
+    int             indexOfCellForParticle(AKParticle const * particle);
     void fillEventsInQueue();
     void updateEventQueueInTime(int time);
     void setParticlesList(AKParticlesList *particlsList);

@@ -52,8 +52,7 @@ void AKCollisionDetectionLogic::fillEventsInQueue()
             addEventsForParticleAndParticlesInCurrentCell(firstParticle, cell, j1);
             // 2. Compute events with particles inside current cell and bound of cell
             box = &cell->bounds;
-            event = getEvent(firstParticle, box);
-            _eventsQueue->insert(event);
+            event = insertEventInQueue(firstParticle, box);
             // 3. Compute events with particles inside current cell and neighbor cell
             neighborsIndexes = cell->neighbors;
             addEventsForParticleAndParticlesInNeighborCells(firstParticle, neighborsIndexes);
@@ -155,9 +154,12 @@ void AKCollisionDetectionLogic::fillNeighborsForCell(AKCell *cell, int index)
     int array[4] = {topNeighbor, topRightNeighbor, rightNeightbor, bottomRightNeighbor};
     cell->addNeighbors(array);
 }
-inline AKEvent* AKCollisionDetectionLogic::getEvent(AKParticle const * firstParticle, AKParticle const * secondParticle)
+inline AKEvent* AKCollisionDetectionLogic::insertEventInQueue(AKParticle const * firstParticle, AKParticle const * secondParticle)
 {
     double timeToEvent = AKGeometricUtils::getInstance().getTimeToCollisionBetweenTwoParticles(firstParticle, secondParticle);
+    if (isnan(timeToEvent)) {
+        return nullptr;
+    }
     DIMENSION_FROM_BOOL(firstParticle->is2Ddimension, count)
     AKEvent *event = new AKEvent();
     event->timeToEvent = timeToEvent;
@@ -165,20 +167,20 @@ inline AKEvent* AKCollisionDetectionLogic::getEvent(AKParticle const * firstPart
     event->secondParticle = const_cast<AKParticle*>(secondParticle);
     event->eventType = AKEventParticleToParticleType;
     event->measure = new int[count]; event->measure[0] = -1; event->measure[1] = -1;
+    _eventsQueue->insert(event);
     return event;
 }
-inline AKEvent* AKCollisionDetectionLogic::getEvent(AKParticle const * firstParticle, AKBox const * box)
+inline AKEvent* AKCollisionDetectionLogic::insertEventInQueue(AKParticle const * firstParticle, AKBox const * box)
 {
     double timeToEvent = std::numeric_limits<double>::max(), tmpTimeToEvent, tmpMeasure;
-    AKRectangle const* rect = &box->rectangle;
-    DIMENSION_FROM_BOOL(rect->is2Ddimension, count)
+    DIMENSION_FROM_BOOL(box->rectangle.is2Ddimension, count)
     int *measure = new int[count];
     double systemMeasure;
     bool isSystemBound;
     AKCollisionCompareType array[3] = {AKCollisionCompareXType, AKCollisionCompareYType, AKCollisionCompareZType};
     // Finding the lowest value of collision time with greater X, lesser X, greater Y, lesser Y, greater Z, lesser Z coordinate of box
     for (int i = 0; i < count; i++) {
-        tmpMeasure = rect->center[i] + rect->radius[i];
+        tmpMeasure = box->rectangle.center[i] + box->rectangle.radius[i];
         systemMeasure = _bounds->rectangle.center[i] + _bounds->rectangle.radius[i];
         isSystemBound = (tmpMeasure == systemMeasure);
         tmpTimeToEvent = AKGeometricUtils::getInstance().getTimeToCollisionBetweenParticleAndBound(firstParticle, tmpMeasure, array[i], isSystemBound, true);
@@ -192,7 +194,7 @@ inline AKEvent* AKCollisionDetectionLogic::getEvent(AKParticle const * firstPart
                 // TODO: Need to implement for 3D case
             }
         }
-        tmpMeasure = rect->center[i] - rect->radius[i];
+        tmpMeasure = box->rectangle.center[i] - box->rectangle.radius[i];
         systemMeasure = _bounds->rectangle.center[i] - _bounds->rectangle.radius[i];
         isSystemBound = (tmpMeasure == systemMeasure);
         tmpTimeToEvent = AKGeometricUtils::getInstance().getTimeToCollisionBetweenParticleAndBound(firstParticle, tmpMeasure, array[i], isSystemBound, false);
@@ -212,6 +214,7 @@ inline AKEvent* AKCollisionDetectionLogic::getEvent(AKParticle const * firstPart
     event->firstParticle = const_cast<AKParticle*>(firstParticle);
     event->secondParticle = nullptr;
     event->measure = measure;
+    _eventsQueue->insert(event);
     return event;
 }
 inline void AKCollisionDetectionLogic::addEventsForParticleAndParticlesInCurrentCell(AKParticle *particle, AKCell* cell, unsigned int startIndex)
@@ -223,8 +226,7 @@ inline void AKCollisionDetectionLogic::addEventsForParticleAndParticlesInCurrent
     for (int i = startIndex; i < particlesCount; i++) {
         secondParticle = particlesList->at(i);
         if (particle != secondParticle) {
-            event = getEvent(particle, secondParticle);
-            _eventsQueue->insert(event);
+            event = insertEventInQueue(particle, secondParticle);
         }
     }
 }
@@ -241,8 +243,7 @@ inline void AKCollisionDetectionLogic::addEventsForParticleAndParticlesInNeighbo
         particlesCount = particlesList->size() & INT_MAX;
         for (int j = 0; j < particlesCount; j++) {
             secondParticle = particlesList->at(j);
-            event = getEvent(particle, secondParticle);
-            _eventsQueue->insert(event);
+            event = insertEventInQueue(particle, secondParticle);
         }
     }
 }
@@ -252,8 +253,8 @@ inline void AKCollisionDetectionLogic::updateParticlesLocation()
     AKParticle *currentParticle;
     for (unsigned int i = 0; i < particlesCount; i++) {
         currentParticle = _particleList->at(i);
+        AKPhysicsUtils::getInstance().changeParticlePlaceInTime(currentParticle, _timeTotal);
     }
-	// TODO: Need to implement
 }
 inline void AKCollisionDetectionLogic::handleParticleToParticleCollisionEvent()
 {
@@ -267,8 +268,6 @@ inline void AKCollisionDetectionLogic::handleParticleToParticleCollisionEvent()
     AKParticle *p2 = _nextEvent->secondParticle;
     AKPhysicsUtils::getInstance().changeParticleVelocityAfterCollisionWithAnotherParticle(p1, p2);
     // 2
-    // TODO: don't need to remove events in case when
-    //       just need to change time for events in which particles take participation
     removeEventsForParticle(p1);
     removeEventsForParticle(p2);
     // 3
@@ -318,13 +317,14 @@ inline void AKCollisionDetectionLogic::addEventsRelatedToParticle(AKParticle* pa
     AKBox *box;
     AKEvent *event;
     const int *neighborsIndexes;
-    
+    // 3.1
     cellIndex = indexOfCellForParticle(particle);
     cell = _cellList->at(cellIndex);
     addEventsForParticleAndParticlesInCurrentCell(particle, cell, 0);
+    // 3.2
     box = &cell->bounds;
-    event = getEvent(particle, box);
-    _eventsQueue->insert(event);
+    event = insertEventInQueue(particle, box);
+    // 3.3
     neighborsIndexes = cell->neighbors;
     addEventsForParticleAndParticlesInNeighborCells(particle, neighborsIndexes);
 }

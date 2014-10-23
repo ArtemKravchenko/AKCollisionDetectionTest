@@ -10,7 +10,7 @@ AKPriorityQueue::AKPriorityQueue()
 AKPriorityQueue::AKPriorityQueue(unsigned int capacity)
 {
     _arrayOfElements = new AKEvent*[capacity*capacity + 1];
-    N = capacity;
+    N = 0;
 }
 AKPriorityQueue::~AKPriorityQueue()
 {
@@ -34,6 +34,9 @@ void AKPriorityQueue::insert(AKEvent *key)
 }
 AKEvent* AKPriorityQueue::delMin()
 {
+    if (N == 0) {
+        return nullptr;
+    }
     AKEvent *min = _arrayOfElements[1];
     exch(1, N--);
     _arrayOfElements[N+1] = nullptr;

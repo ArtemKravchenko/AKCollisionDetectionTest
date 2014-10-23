@@ -8,16 +8,15 @@ using namespace std;
 
 class AKPriorityQueue
 {
-private:
-public:
+protected:
     unsigned int N = 0;
-    AKEvent **_arrayOfElements;
     bool less(unsigned int i, unsigned int j);
     void exch(unsigned int i, unsigned int j);
     void swim(unsigned int k);
     void sink(unsigned int k);
     void deleteElement(unsigned int k);
-    // -- -- //
+public:
+    AKEvent **_arrayOfElements;
     AKPriorityQueue();
     AKPriorityQueue(unsigned int capacity);
     ~AKPriorityQueue();

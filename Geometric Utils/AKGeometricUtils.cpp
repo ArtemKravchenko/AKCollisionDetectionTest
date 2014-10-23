@@ -18,7 +18,7 @@ double AKGeometricUtils::getTimeToCollisionBetweenTwoParticles(AKParticle const 
     
     DIMENSION_FROM_BOOL(p1->is2Ddimension, count)
     // p1->sphere.center --> r10
-    double tmpR20shift[count];
+    double *tmpR20shift = new double[count];
     for (int i = 0; i < count; i++) {
         tmpR20shift[i] = p2->sphere.center[i] + (p1->localTime - p2->localTime)*((p2->velocity)[i]);
     }
@@ -27,7 +27,7 @@ double AKGeometricUtils::getTimeToCollisionBetweenTwoParticles(AKParticle const 
     // p2->velocity --> v2
     double *deltaV = new double[count], *deltaR = new double[count];
     double L = p1->sphere.radius + p2->sphere.radius,
-            A, B, D, deltaRSquare;
+            A = 0, B = 0, D = 0, deltaRSquare = 0;
     VECTOR_DIFERRENCE_FOR_ARRAYS(p1->velocity, p2->velocity, deltaV, count)
     VECTOR_DIFERRENCE_FOR_ARRAYS(p1->sphere.center , tmpR20shift, deltaR, count)
     DOT_PRODUCT_FOR_ARRAYS(deltaV, deltaV, A, count)
@@ -40,7 +40,7 @@ double AKGeometricUtils::getTimeToCollisionBetweenTwoParticles(AKParticle const 
 }
 double AKGeometricUtils::getTimeToCollisionBetweenParticleAndBound(AKParticle const *particle, double bound, AKCollisionCompareType type, bool isSystemBound, bool isGreaterMeasure)
 {
-    double r1 = bound, r0, v;
+    double r0, v;
     double radius = particle->sphere.radius;
     switch (type) {
         case AKCollisionCompareXType:
@@ -78,7 +78,7 @@ double AKGeometricUtils::getTimeToCollisionBetweenParticleAndBound(AKParticle co
             r0 += radius;
         }
     }
-    double time = (r1 - r0) / v - particle->localTime;
+    double time = (bound - r0) / v + particle->localTime;
     
     return time;
 }
