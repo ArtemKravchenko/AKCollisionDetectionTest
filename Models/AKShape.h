@@ -8,9 +8,11 @@
 
 #ifndef AK_SHAPE
 #define AK_SHAPE
+#include "AKDefines.h"
 
 struct AKShape {
     bool  is2Ddimension;
+    DEFINE_IS_EUQAL_WITH_ERROR
 };
 
 #endif

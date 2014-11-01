@@ -7,9 +7,17 @@
 //
 
 #include <iostream>
-#include "AKSphere.h"
+#include "AKVisualizedModel.h"
+#include "openglhandheld.h"
 
-int main(int argc, const char * argv[]) {
-    std::cout << "Hello, World!\n";
+using namespace std;
+
+int main(int argc, char ** argv) {
+    // Initialize GLUT and OpenGL
+    AKOpenGLInit::getInstance().delegate = &AKOpenGLHandheld::getInstance();
+    AKOpenGLHandheld::getInstance().setUpModels();
+    AKOpenGLInit::getInstance().initOpenGl(&argc, argv);
+    AKOpenGLInit::getInstance().startModellingProcess();
     return 0;
 }
+

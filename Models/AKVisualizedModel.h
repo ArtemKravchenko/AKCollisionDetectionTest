@@ -9,8 +9,13 @@
 #ifndef AK_VISUALIZED_MODEL
 #define AK_VISUALIZED_MODEL
 
+#include "AKDefines.h"
+#include "AKRectangle.h"
+
 struct AKVisualizedModel {
-    bool isVisible;
+    static bool isVisible;
+    
+    virtual void draw() { /* Need to implement in inheritance classes */ };
 };
 
 #endif

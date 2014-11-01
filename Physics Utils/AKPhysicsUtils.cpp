@@ -14,7 +14,7 @@ void AKPhysicsUtils::changeParticlePlaceInTime(AKParticle *particle, double time
 {
     DIMENSION_FROM_BOOL(particle->is2Ddimension, count)
     double *newPosition = new double[count], *velocityShift = new double[count];
-    PRODUCT_VECTOR_BY_NUMBER(particle->velocity, (time - particle->localTime), velocityShift, count);
+    PRODUCT_VECTOR_BY_NUMBER(particle->velocity, time, velocityShift, count);
     VECTOR_SUM_FOR_ARRAYS(particle->sphere.center, velocityShift, particle->sphere.center, count)
     delete [] newPosition; delete [] velocityShift;
 }

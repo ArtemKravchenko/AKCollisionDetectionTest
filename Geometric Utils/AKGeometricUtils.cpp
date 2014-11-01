@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 ShowTime. All rights reserved.
 //
 
+#include <iostream>
 #include <stdio.h>
 #include <cmath>
 #include "AKGeometricUtils.h"
@@ -79,6 +80,5 @@ double AKGeometricUtils::getTimeToCollisionBetweenParticleAndBound(AKParticle co
         }
     }
     double time = (bound - r0) / v + particle->localTime;
-    
     return time;
 }

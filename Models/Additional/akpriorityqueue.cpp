@@ -51,11 +51,16 @@ void AKPriorityQueue::deleteElement(AKEvent *key)
 void AKPriorityQueue::deleteElementForParticle(AKParticle* particle)
 {
     AKEvent *event;
-    for (int i = 0; i < N; i++) {
+    bool isEventHaveTheSamePartilce = false;
+    for (int i = 1; i < N; i++) {
         event = _arrayOfElements[i];
-        // TODO: Need to clearly recheck
-        if ((event->firstParticle) == particle ||
-            (event->secondParticle) == particle) {
+        if (event->firstParticle != NULL) {
+            isEventHaveTheSamePartilce = (*(event->firstParticle) == *particle);
+        }
+        if (!isEventHaveTheSamePartilce && event->secondParticle != NULL) {
+            isEventHaveTheSamePartilce = (*(event->secondParticle) == *particle);
+        }
+        if (isEventHaveTheSamePartilce) {
             deleteElement(event);
             N--;
             i++;

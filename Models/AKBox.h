@@ -9,11 +9,18 @@
 #ifndef AK_BOX
 #define AK_BOX
 
-#include "AKVisualizedModel.h"
 #include "AKRectangle.h"
 
-struct AKBox : public AKVisualizedModel {
+struct AKBox : public AKShape {
     AKRectangle     rectangle;
+    
+    bool operator==(const AKBox &other) const {
+        return this->rectangle == other.rectangle;
+    }
+    
+    bool operator!=(const AKBox &other) const {
+        return !(*this == other);
+    }
 };
 
 #endif

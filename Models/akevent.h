@@ -25,6 +25,15 @@ struct AKEvent {
     int             *measure;
     double          timeToEvent;
     unsigned        int index;
+    int             nextCellIndex;
+    
+    bool operator==(const AKEvent &other) const {
+        return false;
+    }
+    
+    bool operator!=(const AKEvent &other) const {
+        return !(*this == other);
+    }
 };
 
 #endif /* defined(__AKCollisionDetectionTest__akevent__) */
