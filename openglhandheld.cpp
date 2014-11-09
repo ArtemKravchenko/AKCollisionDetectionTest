@@ -21,14 +21,14 @@ void AKOpenGLHandheld::setUpModels()
     bounds->rectangle = AKRectangle();
     bounds->rectangle.center = new double[2];
     bounds->rectangle.radius = new double[2];
-    bounds->rectangle.center[0] = 300; bounds->rectangle.center[1] = 300;
-    bounds->rectangle.radius[0] = 300; bounds->rectangle.radius[1] = 300;
+    bounds->rectangle.center[0] = DISPLAY_WIDTH / 2; bounds->rectangle.center[1] = DISPLAY_WIDTH / 2;
+    bounds->rectangle.radius[0] = DISPLAY_HEIGHT / 2; bounds->rectangle.radius[1] = DISPLAY_HEIGHT / 2;
     
-    GLOBAL_MIN_RADIUS = 300;
-    GLOBAL_BOUND_X = 600;
-    GLOBAL_BOUND_Y = 600;
+    GLOBAL_MIN_RADIUS = DISPLAY_WIDTH / 2;
+    GLOBAL_BOUND_X = DISPLAY_WIDTH;
+    GLOBAL_BOUND_Y = DISPLAY_HEIGHT;
     
-    _collisionDetectionLogic->setBound(bounds, 6, 6);
+    _collisionDetectionLogic->setBound(bounds, 1, 1);
     particle1 = new AKParticle();
     particle2 = new AKParticle();
     particle3 = new AKParticle();
@@ -40,26 +40,26 @@ void AKOpenGLHandheld::setUpModels()
     
     sphere1.is2Ddimension = true; sphere2.is2Ddimension = true; sphere3.is2Ddimension = true; sphere4.is2Ddimension = true;
     
-    sphere1.center = new double[2]; sphere1.center[0] = 370; sphere1.center[1] = 156; sphere1.radius = 15;
-    particle1->velocity = new double[2]; particle1->velocity[0] = 1; particle1->velocity[1] = 1;
+    sphere1.center = new double[2]; sphere1.center[0] = 200; sphere1.center[1] = 400; sphere1.radius = 15;
+    particle1->velocity = new double[2]; particle1->velocity[0] = 5; particle1->velocity[1] = -5;
     particle1->sphere = sphere1;
     particle1->mass = 2;
     particle1->localTime = 0;
     
-    sphere2.center = new double[2]; sphere2.center[0] = 270; sphere2.center[1] = 412; sphere2.radius = 15;
-    particle2->velocity = new double[2]; particle2->velocity[0] = 5; particle2->velocity[1] = 5;
+    sphere2.center = new double[2]; sphere2.center[0] = 584.5; sphere2.center[1] = 15.5; sphere2.radius = 15;
+    particle2->velocity = new double[2]; particle2->velocity[0] = -5; particle2->velocity[1] = 5;
     particle2->sphere = sphere2;
     particle2->mass = 2;
     particle2->localTime = 0;
     
-    sphere3.center = new double[2]; sphere3.center[0] = 472; sphere3.center[1] = 34; sphere3.radius = 15;
-    particle3->velocity = new double[2]; particle3->velocity[0] = 1; particle3->velocity[1] = 1;
+    sphere3.center = new double[2]; sphere3.center[0] = 400; sphere3.center[1] = 200; sphere3.radius = 15;
+    particle3->velocity = new double[2]; particle3->velocity[0] = -5; particle3->velocity[1] = 5;
     particle3->sphere = sphere3;
     particle3->mass = 2;
     particle3->localTime = 0;
     
-    sphere4.center = new double[2]; sphere4.center[0] = 61; sphere4.center[1] = 10; sphere4.radius = 15;
-    particle4->velocity = new double[2]; particle4->velocity[0] = 1; particle4->velocity[1] = 1;
+    sphere4.center = new double[2]; sphere4.center[0] = 15.5; sphere4.center[1] = 584.5; sphere4.radius = 15;
+    particle4->velocity = new double[2]; particle4->velocity[0] = 5; particle4->velocity[1] = -5;
     particle4->sphere = sphere4;
     particle4->mass = 2;
     particle4->localTime = 0;
@@ -69,9 +69,9 @@ void AKOpenGLHandheld::setUpModels()
     _particle3 = new AKVisualizedParticle(*particle3);
     _particle4 = new AKVisualizedParticle(*particle4);
     AKParticlesList *particleList = new AKParticlesList();
-    //particleList->push_back(particle1);
-    particleList->push_back(particle2);
-    //particleList->push_back(particle3);
+    particleList->push_back(particle1);
+    //particleList->push_back(particle2);
+    particleList->push_back(particle3);
     //particleList->push_back(particle4);
     _collisionDetectionLogic->setParticlesList(particleList);
     _collisionDetectionLogic->fillEventsInQueue();
@@ -81,10 +81,11 @@ void AKOpenGLHandheld::setUpModels()
 
 void AKOpenGLHandheld::redrawObjects()
 {
+    _collisionDetectionLogic->drawCells();
     _particle1->draw();
-    _particle2->draw();
+    //_particle2->draw();
     _particle3->draw();
-    _particle4->draw();
+    //_particle4->draw();
 }
 
 void AKOpenGLHandheld::handleTimerChanges(double time)

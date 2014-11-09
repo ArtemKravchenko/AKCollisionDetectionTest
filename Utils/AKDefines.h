@@ -13,6 +13,8 @@
 #define AKOpenGLInclude
 
 #include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <OpenGL/glext.h>
 #include <GLUT/glut.h>
 
 #endif
@@ -23,7 +25,7 @@ static double GLOBAL_BOUND_Y;
 static double GLOBAL_BOUND_Z;
 
 #define DEFINE_IS_EUQAL_WITH_ERROR\
-        constexpr static const double ERROR = 0.01; \
+        constexpr static const double ERROR = 0.1; \
         inline bool isEqualWithError(double value1, double value2) const { \
         return (value1 - ERROR) <= value2 && (value1 + ERROR) >= value2; }
 

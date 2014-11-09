@@ -13,33 +13,34 @@
 #include <vector>
 #include "AKParticle.h"
 
+static const int NEIGHBORS_COUNT = 8;
+
 typedef std::vector<AKParticle*> AKParticlesList;
 
 struct AKCell : public AKShape {
     AKBox               bounds;
     AKParticlesList     insideParticles;
-    int                 neighbors[4];
+    int                 neighbors[8];
     unsigned int        index;
     
     void addParticle(AKParticle* particle)
     {
-        if (insideParticles.size() != 0) {
+        if (insideParticles.size() == 0) {
             insideParticles = AKParticlesList();
         }
         insideParticles.push_back(particle);
     }
-    void addNeighbors(int array[4])
+    void addNeighbors(int array[NEIGHBORS_COUNT])
     {
-        neighbors[0] = array[0];
-        neighbors[1] = array[1];
-        neighbors[2] = array[2];
-        neighbors[3] = array[3];
+        for (int i = 0; i < NEIGHBORS_COUNT; i++) {
+            neighbors[i] = array[i];
+        }
     }
     
     bool operator==(const AKCell &other) const {
         int particlesCount = this->insideParticles.size() & INT_MAX;
         for (int i = 0; i < particlesCount; i++) if (*(this->insideParticles.at(i)) != *other.insideParticles.at(i)) return false;
-        for (int i = 0; i < 4; i++) if (this->neighbors[i] != other.neighbors[i]) return false;
+        for (int i = 0; i < NEIGHBORS_COUNT; i++) if (this->neighbors[i] != other.neighbors[i]) return false;
         return (this->index == other.index) && (this->bounds == other.bounds);
     }
     

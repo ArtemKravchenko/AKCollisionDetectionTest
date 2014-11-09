@@ -11,8 +11,8 @@
 
 #include "AKDefines.h"
 
-const int DISPLAY_WIDTH = 900;
-const int DISPLAY_HEIGHT = 780;
+const int DISPLAY_WIDTH = 600;
+const int DISPLAY_HEIGHT = 600;
 
 class AKOpenGLInitDelegate {
     

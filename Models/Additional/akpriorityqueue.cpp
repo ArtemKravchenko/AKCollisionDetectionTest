@@ -52,7 +52,7 @@ void AKPriorityQueue::deleteElementForParticle(AKParticle* particle)
 {
     AKEvent *event;
     bool isEventHaveTheSamePartilce = false;
-    for (int i = 1; i < N; i++) {
+    for (int i = 1; i < N+1; i++) {
         event = _arrayOfElements[i];
         if (event->firstParticle != NULL) {
             isEventHaveTheSamePartilce = (*(event->firstParticle) == *particle);
@@ -62,8 +62,7 @@ void AKPriorityQueue::deleteElementForParticle(AKParticle* particle)
         }
         if (isEventHaveTheSamePartilce) {
             deleteElement(event);
-            N--;
-            i++;
+            i--;
         }
     }
 }
@@ -104,6 +103,7 @@ void AKPriorityQueue::sink(unsigned int k)
 void AKPriorityQueue::deleteElement(unsigned int k)
 {
     exch(k, N--);
+    delete _arrayOfElements[N+1];
     _arrayOfElements[N+1] = nullptr;
     sink(k);
 }

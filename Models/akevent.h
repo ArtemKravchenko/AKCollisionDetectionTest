@@ -22,7 +22,7 @@ struct AKEvent {
     AKEventType     eventType;
     AKParticle      *firstParticle;
     AKParticle      *secondParticle;
-    int             *measure;
+    int             measure[3];
     double          timeToEvent;
     unsigned        int index;
     int             nextCellIndex;

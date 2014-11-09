@@ -16,7 +16,6 @@
 
 double AKGeometricUtils::getTimeToCollisionBetweenTwoParticles(AKParticle const *p1, AKParticle const *p2)
 {
-    
     DIMENSION_FROM_BOOL(p1->is2Ddimension, count)
     // p1->sphere.center --> r10
     double *tmpR20shift = new double[count];
@@ -37,7 +36,7 @@ double AKGeometricUtils::getTimeToCollisionBetweenTwoParticles(AKParticle const 
     DOT_PRODUCT_FOR_ARRAYS(deltaR, deltaR, deltaRSquare, count)
     D = B*B - A*(deltaRSquare - L*L);
     double time = (B - sqrtl(D)) / A;
-    return time;
+    return time + p1->localTime;
 }
 double AKGeometricUtils::getTimeToCollisionBetweenParticleAndBound(AKParticle const *particle, double bound, AKCollisionCompareType type, bool isSystemBound, bool isGreaterMeasure)
 {

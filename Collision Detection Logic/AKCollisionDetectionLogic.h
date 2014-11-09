@@ -27,17 +27,17 @@ class AKCollisionDetectionLogic {
 private:
     /* ------------------------------ METHODS ------------------------------ */
     DEFINE_IS_EUQAL_WITH_ERROR
-    AKEvent* insertEventInQueue(AKParticle const * firstParticle, AKParticle const * secondParticle);
-    AKEvent* insertEventInQueue(AKParticle const * firstParticle, AKBox const * box);
-    AKEvent* nextEventFromListEvents();
-    void     updateParticlesLocation(double time);
-    void     addEventsForParticleAndParticlesInCurrentCell(AKParticle *particle, AKCell* cell, unsigned int startIndex);
-    void     addEventsForParticleAndParticlesInNeighborCells(AKParticle *particle, const int *neighborsIndexes);
-    void     handleParticleToParticleCollisionEvent();
-    void     handleParticleToBoundCollisionEvent();
-    void     handleParticleLeftCellCollisionEvent();
-    void     removeEventsForParticle(AKParticle* particle);
-    void     addEventsRelatedToParticle(AKParticle* particle);
+    AKEvent*    insertEventInQueue(AKParticle const * firstParticle, AKParticle const * secondParticle);
+    AKEvent*    insertEventInQueue(AKParticle const * firstParticle, AKBox const * box);
+    void        nextEventFromListEvents();
+    void        updateParticlesLocation(double time);
+    void        addEventsForParticleAndParticlesInCurrentCell(AKParticle *particle, AKCell* cell, unsigned int startIndex);
+    void        addEventsForParticleAndParticlesInNeighborCells(AKParticle *particle, const int *neighborsIndexes);
+    void        handleParticleToParticleCollisionEvent();
+    void        handleParticleToBoundCollisionEvent();
+    void        handleParticleLeftCellCollisionEvent();
+    void        removeEventsForParticle(AKParticle* particle);
+    void        addEventsRelatedToParticle(AKParticle* particle);
     inline bool     isEventContainsParticle(AKEvent *event, AKParticle* particle) {
         return (*(event->firstParticle) == *particle || *(event->secondParticle) == *particle);
     }
@@ -68,6 +68,7 @@ public:
     void updateEventQueueInTime(double time);
     void setParticlesList(AKParticlesList *particlsList);
     void setBound(AKBox* bounds, unsigned int row = 1, unsigned int col = 1, unsigned int range = 0);
+    void drawCells();
 };
 
 #endif
