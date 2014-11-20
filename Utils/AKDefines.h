@@ -19,19 +19,15 @@
 
 #endif
 
-static double GLOBAL_MIN_RADIUS;
-static double GLOBAL_BOUND_X;
-static double GLOBAL_BOUND_Y;
-static double GLOBAL_BOUND_Z;
+const int DISPLAY_WIDTH = 600;
+const int DISPLAY_HEIGHT = 600;
 
 #define DEFINE_IS_EUQAL_WITH_ERROR\
-        constexpr static const double ERROR = 0.1; \
+        constexpr static const double ERROR = 0.2; \
         inline bool isEqualWithError(double value1, double value2) const { \
-        return (value1 - ERROR) <= value2 && (value1 + ERROR) >= value2; }
+        return (value1 - ERROR) <= value2 && (value1 + ERROR) >= value2 || (value1 + ERROR) > value2; }
 
 #define IS_EQUAL_WITH_ERROR(value1, value2) isEqualWithError(value1, value2)
-
-#define DIMENSION_FROM_BOOL(is2Ddimension, dimensionName) int dimensionName = (is2Ddimension) ? 2 : 3;
 
 #define ARRAY_FROM_VECTOR_XD(vector, array, count) \
         array[0] = vector[0]; \

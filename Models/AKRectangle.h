@@ -12,12 +12,19 @@
 #include "AKShape.h"
 
 struct AKRectangle : public AKShape  {
-    double*     center;
-    double*     radius;
+    double     center[3];
+    double     radius[3];
+    
+    AKRectangle(unsigned int dimension)
+    {
+        is2Ddimension = (dimension == 2);
+    }
+    ~AKRectangle()
+    {
+    }
     
     bool operator==(const AKRectangle &other) const {
-        DIMENSION_FROM_BOOL(this->is2Ddimension, count);
-        for (int i = 0; i < count; i++) if (!IS_EQUAL_WITH_ERROR(this->center[i], other.center[i]) || !IS_EQUAL_WITH_ERROR(this->radius[i], other.radius[i])) return false; 
+        for (int i = 0; i < 3; i++) if (!IS_EQUAL_WITH_ERROR(this->center[i], other.center[i]) || !IS_EQUAL_WITH_ERROR(this->radius[i], other.radius[i])) return false;
         return true;
     }
     

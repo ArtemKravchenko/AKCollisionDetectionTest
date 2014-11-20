@@ -39,7 +39,10 @@ AKEvent* AKPriorityQueue::delMin()
     }
     AKEvent *min = _arrayOfElements[1];
     exch(1, N--);
+    /*
+    delete _arrayOfElements[N+1];
     _arrayOfElements[N+1] = nullptr;
+    */
     sink(1);
     return min;
 }
@@ -50,6 +53,7 @@ void AKPriorityQueue::deleteElement(AKEvent *key)
 }
 void AKPriorityQueue::deleteElementForParticle(AKParticle* particle)
 {
+    // NEED TO CLEARLY FIXED REMOVING EVENTS FROM QUEUE RELATED TO PARTICLES THAT BELONGS TO EVENT
     AKEvent *event;
     bool isEventHaveTheSamePartilce = false;
     for (int i = 1; i < N+1; i++) {

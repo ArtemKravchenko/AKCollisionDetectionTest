@@ -14,6 +14,9 @@
 struct AKBox : public AKShape {
     AKRectangle     rectangle;
     
+    AKBox(unsigned int dimension) : rectangle(dimension) { }
+    ~AKBox() {}
+    
     bool operator==(const AKBox &other) const {
         return this->rectangle == other.rectangle;
     }

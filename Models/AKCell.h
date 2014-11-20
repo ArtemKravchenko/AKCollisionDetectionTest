@@ -23,6 +23,9 @@ struct AKCell : public AKShape {
     int                 neighbors[8];
     unsigned int        index;
     
+    AKCell(unsigned int dimension) : bounds(dimension) {}
+    ~AKCell() {}
+    
     void addParticle(AKParticle* particle)
     {
         if (insideParticles.size() == 0) {

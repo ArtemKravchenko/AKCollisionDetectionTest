@@ -16,7 +16,7 @@
 class AKVisualizedParticle : public AKVisualizedModel {
     
 private:
-    AKParticle  _particle;
+    AKParticle  &_particle;
     
 public:
     AKVisualizedParticle (AKParticle& particle) :  _particle(particle) {}

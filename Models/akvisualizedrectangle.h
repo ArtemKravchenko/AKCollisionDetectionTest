@@ -9,8 +9,9 @@
 #ifndef AKCollisionDetectionTest_akvisualizedrectangle_h
 #define AKCollisionDetectionTest_akvisualizedrectangle_h
 
+#include <iostream>
 #include "AKVisualizedModel.h"
-#include "AKRectangle.h"
+#include "AKrectangle.h"
 
 class AKVisualizedRectangle : public AKVisualizedModel {
     

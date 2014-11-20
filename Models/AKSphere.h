@@ -12,12 +12,20 @@
 #include "AKShape.h"
 
 struct AKSphere : public AKShape {
-    double*     center;
+    double      center[3];
     double      radius;
     
+    AKSphere(unsigned int dimension)
+    {
+        is2Ddimension = (dimension == 2);
+    }
+    ~AKSphere()
+    {
+        radius = NULL;
+    }
+    
     bool operator==(const AKSphere &other) const {
-        DIMENSION_FROM_BOOL(this->is2Ddimension, count)
-        for (int i = 0; i < count; i++) if (!IS_EQUAL_WITH_ERROR(this->center[i], other.center[i])) return false;
+        for (int i = 0; i < 3; i++) if (!IS_EQUAL_WITH_ERROR(this->center[i], other.center[i])) return false;
         return IS_EQUAL_WITH_ERROR(this->radius, other.radius);
     }
     

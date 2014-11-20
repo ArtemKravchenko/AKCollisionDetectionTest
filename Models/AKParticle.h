@@ -16,12 +16,26 @@ struct AKParticle : public AKShape  {
     AKSphere    sphere;
     double      mass;
     double      localTime;
-    double      *velocity;
+    double      velocity[3];
     int         cellIndex;
     
+    AKParticle(unsigned int dimension) : sphere(dimension)
+    {
+        is2Ddimension = (dimension == 2);
+        wasInit = true;
+    }
+    ~AKParticle()
+    {
+        if (!wasInit) {
+            throw std::exception();
+        }
+        mass = NULL;
+        localTime = NULL;
+        cellIndex = NULL;
+    }
+    
     bool operator==(const AKParticle &other) const {
-        DIMENSION_FROM_BOOL(this->is2Ddimension, count);
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < 3; i++) {
             if (!IS_EQUAL_WITH_ERROR(this->velocity[i], other.velocity[i])) {
                 return false;
             }
@@ -32,6 +46,8 @@ struct AKParticle : public AKShape  {
     bool operator!=(const AKParticle &other) const {
         return !(*this == other);
     }
+private:
+    bool wasInit;
 };
 
 #endif

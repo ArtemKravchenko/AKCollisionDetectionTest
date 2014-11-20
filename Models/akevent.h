@@ -27,6 +27,21 @@ struct AKEvent {
     unsigned        int index;
     int             nextCellIndex;
     
+    AKEvent(unsigned int dimension)
+    {
+        firstParticle = new AKParticle(dimension);
+        secondParticle = new AKParticle(dimension);
+    }
+    ~AKEvent()
+    {
+        index = NULL;
+        nextCellIndex = NULL;
+        //delete firstParticle;
+        //firstParticle = nullptr;
+        //delete secondParticle;
+        //secondParticle = nullptr;
+    }
+    
     bool operator==(const AKEvent &other) const {
         return false;
     }
