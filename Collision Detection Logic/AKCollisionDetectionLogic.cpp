@@ -15,7 +15,6 @@
 #include "AKDefines.h"
 #include <cmath>
 #include <assert.h>
-#include "akvisualizedrectangle.h"
 
 // Singleton
 using namespace std;
@@ -117,11 +116,10 @@ void AKCollisionDetectionLogic::setBound(AKBox* bounds, unsigned int row, unsign
     _cellsCountInCol = col;
     _cellsCountInRow = row;
     _cellsCountInRange = range;
-    AKRectangle const *rect = &_bounds->rectangle;
-    _cellWidth = (2 * abs(rect->center[0])) / _cellsCountInCol;
-    _cellHeight = (2 * abs(rect->center[1])) / _cellsCountInRow;
+    _cellWidth = (2 * abs(_bounds->center[0])) / _cellsCountInCol;
+    _cellHeight = (2 * abs(_bounds->center[1])) / _cellsCountInRow;
     if (range > 0) {
-        _cellDepth = (2 * abs(rect->center[2])) / _cellsCountInRange;
+        _cellDepth = (2 * abs(_bounds->center[2])) / _cellsCountInRange;
     }
     _isBoundsAlreadySet = true;
     // Init cells list
@@ -134,12 +132,12 @@ void AKCollisionDetectionLogic::setBound(AKBox* bounds, unsigned int row, unsign
         AKCell cell = AKCell(2);
         cell.index = i;
         // Compute cell bounds
-        cell.bounds.rectangle.center[0] = _cellWidth * (i % _cellsCountInRow) + _cellWidth / 2;
-        cell.bounds.rectangle.center[1] = _cellHeight * (i / _cellsCountInCol) + _cellHeight / 2;
-        cell.bounds.rectangle.radius[0] = _cellWidth / 2;
-        cell.bounds.rectangle.radius[1] = _cellHeight / 2;
+        cell.bounds.center[0] = _cellWidth * (i % _cellsCountInRow) + _cellWidth / 2;
+        cell.bounds.center[1] = _cellHeight * (i / _cellsCountInCol) + _cellHeight / 2;
+        cell.bounds.radius[0] = _cellWidth / 2;
+        cell.bounds.radius[1] = _cellHeight / 2;
         if (range != 0) {
-            cell.bounds.rectangle.radius[2] = _cellDepth / 2;
+            cell.bounds.radius[2] = _cellDepth / 2;
         }
         //
         fillNeighborsForCell(&cell, i);
@@ -151,8 +149,7 @@ void AKCollisionDetectionLogic::drawCells()
     int count = _cellList->size() & INT_MAX;
     for (int i = 0; i < count; i++) {
         AKCell *cell = &_cellList->at(i);
-        AKVisualizedRectangle rect = AKVisualizedRectangle(cell->bounds.rectangle);
-        rect.draw();
+        cell->draw();
     }
 }
 #pragma mark /* -------------------  PRIVATE FUNCTIONS ------------------- */
@@ -171,7 +168,7 @@ inline int AKCollisionDetectionLogic::indexOfCellForParticle(AKParticle const * 
     double pointX = (particle->sphere.center)[0], pointY = (particle->sphere.center)[1];
     indexX = static_cast<int>(pointX / _cellWidth);
     indexY = static_cast<int>(pointY / _cellHeight);
-    if (particle->is2Ddimension) {
+    if (particle->sphere.is2dDimension) {
         returnIndex = indexY * _cellsCountInRow + indexX;
     } else {
         double pointZ = (particle->sphere.center)[2];
@@ -258,8 +255,8 @@ inline AKEvent* AKCollisionDetectionLogic::insertEventInQueue(AKParticle const *
     for (int i = 0; i < 2; i++) { // loop through coordinates
         for (int j = 0; j < 2; j++) { // loop through sign for special coordinates
             kof = (j == 0) ? 1 : -1;
-            tmpMeasure = box->rectangle.center[i] + (box->rectangle.radius[i] * kof);
-            systemMeasure = _bounds->rectangle.center[i] + (_bounds->rectangle.radius[i] * kof);
+            tmpMeasure = box->center[i] + (box->radius[i] * kof);
+            systemMeasure = _bounds->center[i] + (_bounds->radius[i] * kof);
             tmpIsSystemBound = (tmpMeasure == systemMeasure);
             tmpTimeToEvent = AKGeometricUtils::getInstance().getTimeToCollisionBetweenParticleAndBound(firstParticle, tmpMeasure, array[i], tmpIsSystemBound, (j == 0));
             if (tmpTimeToEvent - firstParticle->localTime > 0 && tmpTimeToEvent < timeToEvent) {

@@ -48,7 +48,7 @@ void AKPhysicsUtils::changeParticleVelocityAfterCollisionWithAnotherParticle(AKP
 void AKPhysicsUtils::changeParticleVelocityAfterCollisionWithBound(AKParticle* particle, int *bound)
 {
     double n[3];
-    if (particle->is2Ddimension) {
+    if (particle->sphere.is2dDimension) {
         if (bound[0] == 0) {
             if (bound[1] == 0) {
                 n[0] = 1; n[1] = 0;

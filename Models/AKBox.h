@@ -1,28 +1,50 @@
-//
-//  AKBox.h
-//  AKCollisionDetectionFramework
-//
-//  Created by Artem Kravchenko on 9/20/14.
-//  Copyright (c) 2014 ShowTime. All rights reserved.
-//
+using namespace std;
 
-#ifndef AK_BOX
-#define AK_BOX
+#ifndef __AKBox_h__
+#define __AKBox_h__
 
-#include "AKRectangle.h"
+#include "AKShape.h"
+#include "AKVisualizedModel.h"
 
-struct AKBox : public AKShape {
-    AKRectangle     rectangle;
+struct AKBox: public AKShape, public AKVisualizedModel
+{
+    double center[3];
+    double radius[3];
     
-    AKBox(unsigned int dimension) : rectangle(dimension) { }
-    ~AKBox() {}
+    AKBox(unsigned int dimension)
+    {
+        is2dDimension = (dimension == 2);
+    }
+    ~AKBox()
+    {
+    }
     
     bool operator==(const AKBox &other) const {
-        return this->rectangle == other.rectangle;
+        for (int i = 0; i < 3; i++) if (!IS_EQUAL_WITH_ERROR(this->center[i], other.center[i]) || !IS_EQUAL_WITH_ERROR(this->radius[i], other.radius[i])) return false;
+        return true;
     }
     
     bool operator!=(const AKBox &other) const {
         return !(*this == other);
+    }
+    
+    virtual void draw() {
+        glColor3f(1.0, 1.0, 1.0);
+        glLoadIdentity();
+        glBegin(GL_LINES);
+        // Left
+        glVertex2f(center[0] - radius[0], center[1] - radius[1]);
+        glVertex2f(center[0] - radius[0], center[1] + radius[1]);
+        // Top
+        glVertex2f(center[0] - radius[0], center[1] + radius[1]);
+        glVertex2f(center[0] + radius[0], center[1] + radius[1]);
+        // Right
+        glVertex2f(center[0] + radius[0], center[1] - radius[1]);
+        glVertex2f(center[0] + radius[0], center[1] + radius[1]);
+        // Bottom
+        glVertex2f(center[0] - radius[0], center[1] - radius[1]);
+        glVertex2f(center[0] + radius[0], center[1] - radius[1]);
+        glEnd();
     }
 };
 

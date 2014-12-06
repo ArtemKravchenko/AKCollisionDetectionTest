@@ -1,23 +1,19 @@
-//
-//  AKShpere.h
-//  AKCollisionDetectionFramework
-//
-//  Created by Artem Kravchenko on 9/20/14.
-//  Copyright (c) 2014 ShowTime. All rights reserved.
-//
+using namespace std;
 
-#ifndef AK_SPHERE
-#define AK_SPHERE
+#ifndef __AKSphere_h__
+#define __AKSphere_h__
 
 #include "AKShape.h"
+#include "AKVisualizedModel.h"
 
-struct AKSphere : public AKShape {
-    double      center[3];
-    double      radius;
+struct AKSphere: public AKShape, public AKVisualizedModel
+{
+    double center[3];
+    double radius;
     
     AKSphere(unsigned int dimension)
     {
-        is2Ddimension = (dimension == 2);
+        is2dDimension = (dimension == 2);
     }
     ~AKSphere()
     {
@@ -31,6 +27,19 @@ struct AKSphere : public AKShape {
     
     bool operator!=(const AKSphere &other) const {
         return !(*this == other);
+    }
+    
+    virtual void draw() {
+        glLoadIdentity();
+        float x = center[0];
+        float y = center[1];
+        float z = 0;
+        if (!is2dDimension) {
+            z = center[2];
+        }
+        glColor3f(1.0, 0.0, 0.0);
+        glTranslatef(x, y, z);
+        glutSolidSphere(radius, 20, 2);
     }
 };
 

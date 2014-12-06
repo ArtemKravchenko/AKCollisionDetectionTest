@@ -12,7 +12,7 @@
 #include "AKCell.h"
 #include <vector>
 #include "akpriorityqueue.h"
-#include "akevent.h"
+#include "AKEvent.h"
 
 using std::vector;
 typedef vector<AKCell>             AKCellsList;

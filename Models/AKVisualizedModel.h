@@ -1,21 +1,15 @@
-//
-//  AKVisualizedModel.h
-//  AKCollisionDetectionTest
-//
-//  Created by Artem Kravchenko on 9/21/14.
-//  Copyright (c) 2014 ShowTime. All rights reserved.
-//
+#include <string>
+#include <vector>
+#include <exception>
 
-#ifndef AK_VISUALIZED_MODEL
-#define AK_VISUALIZED_MODEL
-
+#ifndef __AKVisualizedModel_h__
+#define __AKVisualizedModel_h__
 #include "AKDefines.h"
-#include "AKRectangle.h"
 
-struct AKVisualizedModel {
+struct AKVisualizedModel
+{
+    virtual void draw() = 0;
     static bool isVisible;
-    
-    virtual void draw() { /* Need to implement in inheritance classes */ };
+    DEFINE_IS_EUQAL_WITH_ERROR
 };
-
 #endif

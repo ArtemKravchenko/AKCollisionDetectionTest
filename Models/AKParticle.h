@@ -1,39 +1,35 @@
-//
-//  AKParticle.h
-//  AKCollisionDetectionFramework
-//
-//  Created by Artem Kravchenko on 9/20/14.
-//  Copyright (c) 2014 ShowTime. All rights reserved.
-//
 
-#ifndef AK_PARTICLE
-#define AK_PARTICLE
 
-#include "AKShape.h"
+#ifndef __AKParticle_h__
+#define __AKParticle_h__
+
+#include "AKVisualizedModel.h"
 #include "AKSphere.h"
+using namespace std;
 
-struct AKParticle : public AKShape  {
-    AKSphere    sphere;
-    double      mass;
-    double      localTime;
-    double      velocity[3];
-    int         cellIndex;
+struct AKParticle: public AKVisualizedModel
+{
+    double              mass;
+    double              localTime;
+    double              velocity[3];
+    int                 cellIndex;
+    AKSphere            sphere;
     
-    AKParticle(unsigned int dimension) : sphere(dimension)
+    AKParticle(unsigned int dimension) : sphere (dimension)
     {
-        is2Ddimension = (dimension == 2);
-        wasInit = true;
+        
     }
     ~AKParticle()
     {
-        if (!wasInit) {
-            throw std::exception();
-        }
         mass = NULL;
         localTime = NULL;
         cellIndex = NULL;
     }
     
+    virtual void draw() {
+        sphere.draw();
+    }
+        
     bool operator==(const AKParticle &other) const {
         for (int i = 0; i < 3; i++) {
             if (!IS_EQUAL_WITH_ERROR(this->velocity[i], other.velocity[i])) {
@@ -46,8 +42,6 @@ struct AKParticle : public AKShape  {
     bool operator!=(const AKParticle &other) const {
         return !(*this == other);
     }
-private:
-    bool wasInit;
 };
 
 #endif

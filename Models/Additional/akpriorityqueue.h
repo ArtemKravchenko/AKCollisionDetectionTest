@@ -2,7 +2,7 @@
 #define AKPRIORITYQUEUE_H
 
 #include <vector>
-#include "akevent.h"
+#include "AKEvent.h"
 
 using namespace std;
 

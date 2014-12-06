@@ -1,29 +1,27 @@
-//
-//  AKCell.h
-//  AKCollisionDetectionTest
-//
-//  Created by Artem Kravchenko on 9/22/14.
-//  Copyright (c) 2014 ShowTime. All rights reserved.
-//
+#include <string>
+#include <vector>
+#include <exception>
+#include "AKDefines.h"
+using namespace std;
 
-#ifndef AK_CELL
-#define AK_CELL
+#ifndef __AKCell_h__
+#define __AKCell_h__
 
 #include "AKBox.h"
-#include <vector>
 #include "AKParticle.h"
 
-static const int NEIGHBORS_COUNT = 8;
 
+static const int NEIGHBORS_COUNT = 8;
 typedef std::vector<AKParticle*> AKParticlesList;
 
-struct AKCell : public AKShape {
-    AKBox               bounds;
-    AKParticlesList     insideParticles;
-    int                 neighbors[8];
-    unsigned int        index;
+struct AKCell: public AKVisualizedModel
+{
+    int             neighbors[NEIGHBORS_COUNT];
+    int             index;
+    AKBox           bounds;
+    AKParticlesList insideParticles;
     
-    AKCell(unsigned int dimension) : bounds(dimension) {}
+    AKCell(unsigned int dimension) : bounds(dimension) {  }
     ~AKCell() {}
     
     void addParticle(AKParticle* particle)
@@ -38,6 +36,10 @@ struct AKCell : public AKShape {
         for (int i = 0; i < NEIGHBORS_COUNT; i++) {
             neighbors[i] = array[i];
         }
+    }
+    
+    virtual void draw() {
+        bounds.draw();
     }
     
     bool operator==(const AKCell &other) const {

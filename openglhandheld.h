@@ -12,13 +12,12 @@
 #include <stdio.h>
 #include "openglinit.h"
 #include "AKCollisionDetectionLogic.h"
-#include "akvisualizedparticle.h"
 
 class AKOpenGLHandheld : public AKOpenGLInitDelegate {
 
 private:
     AKCollisionDetectionLogic   *_collisionDetectionLogic;
-    AKVisualizedParticle        *_particle1, *_particle2, *_particle3, *_particle4, *_particle5, *_particle6, *_particle7, *_particle8,
+    AKParticle        *_particle1, *_particle2, *_particle3, *_particle4, *_particle5, *_particle6, *_particle7, *_particle8,
     *_particle9, *_particle10, *_particle11, *_particle12, *_particle13, *_particle14, *_particle15, *_particle16;
     AKOpenGLHandheld() {};                   // Constructor? (the {} brackets) are needed here.
     // Dont forget to declare these two. You want to make sure they
