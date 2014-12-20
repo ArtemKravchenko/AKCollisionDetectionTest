@@ -29,6 +29,7 @@ struct AKBox: public AKShape, public AKVisualizedModel
     }
     
     virtual void draw() {
+#ifdef __glut_h__
         glColor3f(1.0, 1.0, 1.0);
         glLoadIdentity();
         glBegin(GL_LINES);
@@ -45,6 +46,7 @@ struct AKBox: public AKShape, public AKVisualizedModel
         glVertex2f(center[0] - radius[0], center[1] - radius[1]);
         glVertex2f(center[0] + radius[0], center[1] - radius[1]);
         glEnd();
+#endif
     }
 };
 

@@ -17,7 +17,7 @@ struct AKParticle: public AKVisualizedModel
     
     AKParticle(unsigned int dimension) : sphere (dimension)
     {
-        
+        localTime = 0;
     }
     ~AKParticle()
     {

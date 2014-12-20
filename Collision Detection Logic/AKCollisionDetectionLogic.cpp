@@ -65,21 +65,13 @@ void AKCollisionDetectionLogic::fillEventsInQueue(unsigned int capacity)
 }
 void AKCollisionDetectionLogic::updateEventQueueInTime(double time)
 {
-    /*
-    if (_nextEvent->firstParticle->sphere.center[0] - 15 <= 0 || _nextEvent->firstParticle->sphere.center[0] + 15 >= DISPLAY_WIDTH ||
-        _nextEvent->firstParticle->sphere.center[1] - 15 <= 0 || _nextEvent->firstParticle->sphere.center[1] + 15 >= DISPLAY_HEIGHT) {
-        int a = 0;
-    }
-     */
     if (!_isBoundsAlreadySet || !_isParticlesAlreadySet)
         return;
     _timeTotal += time;
-    
     assert(_nextEvent->firstParticle->sphere.center[0] + _nextEvent->firstParticle->sphere.radius < DISPLAY_WIDTH);
     assert(_nextEvent->firstParticle->sphere.center[0] - _nextEvent->firstParticle->sphere.radius >= -1);
     assert(_nextEvent->firstParticle->sphere.center[1] + _nextEvent->firstParticle->sphere.radius < DISPLAY_HEIGHT);
     assert(_nextEvent->firstParticle->sphere.center[1] - _nextEvent->firstParticle->sphere.radius >= -1);
-    updateParticlesLocation(time);
     while (IS_EQUAL_WITH_ERROR(_timeTotal, _timeToEvent)) {
         AKEventType eventType = _nextEvent->eventType;
         _nextEvent->firstParticle->localTime = _timeTotal;
@@ -104,6 +96,7 @@ void AKCollisionDetectionLogic::updateEventQueueInTime(double time)
         }
         nextEventFromListEvents();
     }
+    updateParticlesLocation(time);
 }
 void AKCollisionDetectionLogic::setParticlesList(AKParticlesList *particlsList)
 {

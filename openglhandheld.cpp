@@ -8,131 +8,122 @@
 
 #include "openglhandheld.h"
 #include "AKSphere.h"
+#include <string>
 #include "AKSystemGenerator.h"
+#include <sstream>
+#include <algorithm>
+#include <iterator>
+#include <istream>
+#include <sstream>
+#include <fstream>
+
+using namespace std;
+
+std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+}
+
+// px, py, radius, vx, vy, mass
+vector<string> arrayOfParticles()
+{
+    return {
+        "210,400,15,5,-5,2",
+        "584.5,15.5,15,-5,5,2",
+        "400,200,15,-5,5,2",
+        "15.5,584.5,15,5,-5,2",
+        "101.182,200,15,2.34774,-6.66994,2",
+        "400,500,15,-5,5,2",
+        "20,200,15,-5,5,2",
+        "45.5,504.5,15,5,-5,2",
+        "50,50,15,5,-5,2",
+        "80,80,15,-5,5,2",
+        "110,150,15,-5,5,2",
+        "300,300,15,5,-5,2",
+        "350,350,15,10,6.66994,2",
+        "400,400,15,-5,5,2",
+        "500,100,15,-5,5,2",
+        "550,550,15,5,-5,2",
+    };
+}
+
+vector<string> readArrayOfParticles() {
+#ifdef __APPLE__
+    CFBundleRef mainBundle = CFBundleGetMainBundle();
+    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
+    char path[PATH_MAX];
+    if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path, PATH_MAX))
+    {
+        // error!
+    }
+    CFRelease(resourcesURL);
+    
+    chdir(path);
+    std::cout << "Current Path: " << path << std::endl;
+#endif
+    string slash = "/";
+    string fileName = "example_collision.txt";
+    fileName = path + slash + fileName;
+    string line;
+    vector<string> *elems = new vector<string>();;
+    ifstream myfile (fileName);
+    if (myfile.is_open())
+    {
+        while ( getline (myfile,line) )
+        {
+            split(line, '|', *elems);
+            cout << line << '\n';
+        }
+        myfile.close();
+    }
+    return *elems;
+}
+
+void initSystemData()
+{
+    AKSystemGenerator::getInstance().COORDINATE_MIN_VALUE = 16;
+    AKSystemGenerator::getInstance().COORDINATE_MAX_VALUE = 584;
+    AKSystemGenerator::getInstance().MASS_MIN_VALUE = 2;
+    AKSystemGenerator::getInstance().MASS_MAX_VALUE = 10;
+    AKSystemGenerator::getInstance().VELOCITY_MIN_VALUE = 2;
+    AKSystemGenerator::getInstance().VELOCITY_MAX_VALUE = 10;
+    AKSystemGenerator::getInstance().RADIUS_MIN_VALUE = 2;
+    AKSystemGenerator::getInstance().RADIUS_MAX_VALUE = 4;
+    AKSystemGenerator::getInstance().generateParticles(1000);
+    readArrayOfParticles();
+}
 
 void AKOpenGLHandheld::setUpModels()
 {
+    initSystemData();
     _collisionDetectionLogic = new AKCollisionDetectionLogic();
     AKBox *bounds = new AKBox(2);
     bounds->center[0] = DISPLAY_WIDTH / 2; bounds->center[1] = DISPLAY_WIDTH / 2;
     bounds->radius[0] = DISPLAY_HEIGHT / 2; bounds->radius[1] = DISPLAY_HEIGHT / 2;
     
-    _collisionDetectionLogic->setBound(bounds, 4, 4);
-    _particle1 = new AKParticle(2);
-    _particle2 = new AKParticle(2);
-    _particle3 = new AKParticle(2);
-    _particle4 = new AKParticle(2);
-    _particle5 = new AKParticle(2);
-    _particle6 = new AKParticle(2);
-    _particle7 = new AKParticle(2);
-    _particle8 = new AKParticle(2);
-    _particle9 = new AKParticle(2);
-    _particle10 = new AKParticle(2);
-    _particle11 = new AKParticle(2);
-    _particle12 = new AKParticle(2);
-    _particle13 = new AKParticle(2);
-    _particle14 = new AKParticle(2);
-    _particle15 = new AKParticle(2);
-    _particle16 = new AKParticle(2);
-    
-    _particle1->sphere.center[0] = 210; _particle1->sphere.center[1] = 400; _particle1->sphere.radius = 15;
-    _particle1->velocity[0] = 5; _particle1->velocity[1] = -5;
-    _particle1->mass = 2;
-    _particle1->localTime = 0;
-    
-    _particle2->sphere.center[0] = 584.5; _particle2->sphere.center[1] = 15.5; _particle2->sphere.radius = 15;
-    _particle2->velocity[0] = -5; _particle2->velocity[1] = 5;
-    _particle2->mass = 2;
-    
-    _particle3->sphere.center[0] = 400; _particle3->sphere.center[1] = 200; _particle3->sphere.radius = 15;
-    _particle3->velocity[0] = -5; _particle3->velocity[1] = 5;
-    _particle3->mass = 2;
-    _particle3->localTime = 0;
-    
-    _particle4->sphere.center[0] = 15.5; _particle4->sphere.center[1] = 584.5; _particle4->sphere.radius = 15;
-    _particle4->velocity[0] = 5; _particle4->velocity[1] = -5;
-    _particle4->mass = 2;
-    _particle4->localTime = 0;
-    
-    _particle5->sphere.center[0] = 101.182; _particle5->sphere.center[1] = 200; _particle5->sphere.radius = 15;
-    _particle5->velocity[0] = 2.34774; _particle5->velocity[1] = -6.66994;
-    _particle5->mass = 2;
-    _particle5->localTime = 0;
-    
-    _particle6->sphere.center[0] = 400; _particle6->sphere.center[1] = 500; _particle6->sphere.radius = 15;
-    _particle6->velocity[0] = -5; _particle6->velocity[1] = 5;
-    _particle6->mass = 2;
-    _particle6->localTime = 0;
-    
-    _particle7->sphere.center[0] = 20; _particle7->sphere.center[1] = 200; _particle7->sphere.radius = 15;
-    _particle7->velocity[0] = -5; _particle7->velocity[1] = 5;
-    _particle7->mass = 2;
-    _particle7->localTime = 0;
-    
-    _particle8->sphere.center[0] = 45.5; _particle8->sphere.center[1] = 504.5; _particle8->sphere.radius = 15;
-    _particle8->velocity[0] = 5; _particle8->velocity[1] = -5;
-    _particle8->mass = 2;
-    _particle8->localTime = 0;
-    
-    _particle9->sphere.center[0] = 50; _particle9->sphere.center[1] = 50; _particle9->sphere.radius = 15;
-    _particle9->velocity[0] = 5; _particle9->velocity[1] = -5;
-    _particle9->mass = 2;
-    _particle9->localTime = 0;
-    
-    _particle10->sphere.center[0] = 80; _particle10->sphere.center[1] = 80; _particle10->sphere.radius = 15;
-    _particle10->velocity[0] = -5; _particle10->velocity[1] = 5;
-    _particle10->mass = 2;
-    
-    _particle11->sphere.center[0] = 110; _particle11->sphere.center[1] = 150; _particle11->sphere.radius = 15;
-    _particle11->velocity[0] = -5; _particle11->velocity[1] = 5;
-    _particle11->mass = 2;
-    _particle11->localTime = 0;
-    
-    _particle12->sphere.center[0] = 300; _particle12->sphere.center[1] = 300; _particle12->sphere.radius = 15;
-    _particle12->velocity[0] = 5; _particle12->velocity[1] = -5;
-    _particle12->mass = 2;
-    _particle12->localTime = 0;
-    
-    _particle13->sphere.center[0] = 350; _particle13->sphere.center[1] = 350; _particle13->sphere.radius = 15;
-    _particle13->velocity[0] = 10; _particle13->velocity[1] = 6.66994;
-    _particle13->mass = 2;
-    _particle13->localTime = 0;
-    
-    _particle14->sphere.center[0] = 400; _particle14->sphere.center[1] = 400; _particle14->sphere.radius = 15;
-    _particle14->velocity[0] = -5; _particle14->velocity[1] = 5;
-    _particle14->mass = 2;
-    _particle14->localTime = 0;
-    
-    _particle15->sphere.center[0] = 500; _particle15->sphere.center[1] = 100; _particle15->sphere.radius = 15;
-    _particle15->velocity[0] = -5; _particle15->velocity[1] = 5;
-    _particle15->mass = 2;
-    _particle15->localTime = 0;
-    
-    _particle16->sphere.center[0] = 550; _particle16->sphere.center[1] = 550; _particle16->sphere.radius = 15;
-    _particle16->velocity[0] = 5; _particle16->velocity[1] = -5;
-    _particle16->mass = 2;
-    _particle16->localTime = 0;
-    
+    _collisionDetectionLogic->setBound(bounds, 1, 1);
+    vector<string> particlesData = readArrayOfParticles(); //arrayOfParticles();
     AKParticlesList *_particleList = new AKParticlesList();
-
-    _particleList->push_back(_particle1);
-    _particleList->push_back(_particle2);
-    _particleList->push_back(_particle3);
-    _particleList->push_back(_particle4);
-    _particleList->push_back(_particle5);
-    _particleList->push_back(_particle6);
-    _particleList->push_back(_particle7);
-    _particleList->push_back(_particle8);
-    _particleList->push_back(_particle9);
-    _particleList->push_back(_particle10);
-    _particleList->push_back(_particle11);
-    _particleList->push_back(_particle12);
-    _particleList->push_back(_particle13);
-    _particleList->push_back(_particle14);
-    _particleList->push_back(_particle15);
-    _particleList->push_back(_particle16);
+    this->particlesArray = new vector<AKParticle*>();
+    vector<string> *elems;
+    AKParticle* particle;
+    for (int i = 0; i < particlesData.size(); i++) {
+        elems = new vector<string>();
+        particle = new AKParticle(2);
+        split(particlesData.at(i), ',', *elems);
+        particle->sphere.center[0] = std::stod(elems->at(0)); particle->sphere.center[1] = std::stod(elems->at(1)); particle->sphere.radius = std::stod(elems->at(2));
+        particle->velocity[0] = std::stod(elems->at(3)); particle->velocity[1] = std::stod(elems->at(4));
+        particle->mass = std::stod(elems->at(5));
+        this->particlesArray->push_back(particle);
+        _particleList->push_back(particle);
+    }
+    
     _collisionDetectionLogic->setParticlesList(_particleList);
-     _collisionDetectionLogic->fillEventsInQueue();
+    _collisionDetectionLogic->fillEventsInQueue();
 }
 
 #pragma mark - OpenGLInit delegate
@@ -140,22 +131,11 @@ void AKOpenGLHandheld::setUpModels()
 void AKOpenGLHandheld::redrawObjects()
 {
     _collisionDetectionLogic->drawCells();
-    _particle1->draw();
-    _particle2->draw();
-    _particle3->draw();
-    _particle4->draw();
-    _particle5->draw();
-    _particle6->draw();
-    _particle7->draw();
-    _particle8->draw();
-    _particle9->draw();
-    _particle10->draw();
-    _particle11->draw();
-    _particle12->draw();
-    _particle13->draw();
-    _particle14->draw();
-    _particle15->draw();
-    _particle16->draw();
+    int particlesCount = this->particlesArray->size() & INT_MAX;
+    for (int i = 0; i < particlesCount; i++) {
+        AKParticle *particle = particlesArray->at(i);
+        particle->draw();
+    }
 }
 
 void AKOpenGLHandheld::handleTimerChanges(double time)

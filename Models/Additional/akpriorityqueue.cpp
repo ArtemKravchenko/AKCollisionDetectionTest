@@ -46,6 +46,10 @@ AKEvent* AKPriorityQueue::delMin()
     sink(1);
     return min;
 }
+AKEvent* AKPriorityQueue::secondEvent()
+{
+    return _arrayOfElements[2];
+}
 void AKPriorityQueue::deleteElement(AKEvent *key)
 {
     unsigned int k = key->index;
@@ -109,5 +113,8 @@ void AKPriorityQueue::deleteElement(unsigned int k)
     exch(k, N--);
     delete _arrayOfElements[N+1];
     _arrayOfElements[N+1] = nullptr;
-    sink(k);
+    if (k < N) {
+        swim(k);
+        sink(k);
+    }
 }

@@ -23,9 +23,9 @@ const int DISPLAY_WIDTH = 600;
 const int DISPLAY_HEIGHT = 600;
 
 #define DEFINE_IS_EUQAL_WITH_ERROR\
-        constexpr static const double ERROR = 0.2; \
+        constexpr static const double ERROR = 0.1; \
         inline bool isEqualWithError(double value1, double value2) const { \
-        return (value1 - ERROR) <= value2 && (value1 + ERROR) >= value2 || (value1 + ERROR) > value2; }
+        return (value1 - ERROR) <= value2 && value2 <= (value1 + ERROR); }
 
 #define IS_EQUAL_WITH_ERROR(value1, value2) isEqualWithError(value1, value2)
 

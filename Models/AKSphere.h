@@ -30,6 +30,7 @@ struct AKSphere: public AKShape, public AKVisualizedModel
     }
     
     virtual void draw() {
+#ifdef __glut_h__
         glLoadIdentity();
         float x = center[0];
         float y = center[1];
@@ -40,6 +41,7 @@ struct AKSphere: public AKShape, public AKVisualizedModel
         glColor3f(1.0, 0.0, 0.0);
         glTranslatef(x, y, z);
         glutSolidSphere(radius, 20, 2);
+#endif
     }
 };
 

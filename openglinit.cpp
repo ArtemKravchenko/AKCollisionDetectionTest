@@ -22,7 +22,7 @@ void AKOpenGLInit::initOpenGl(int *argc, char ** argv)
     glutInitWindowSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
     glutCreateWindow("Collision Detection Test");
     glutDisplayFunc(display);
-    glutTimerFunc(0.001, timer_change, 0);
+    glutTimerFunc(1, timer_change, 0);
     init();
 }
 
@@ -44,7 +44,7 @@ void timer_change(int time)
 {
     AKOpenGLInit::getInstance().delegate->handleTimerChanges(0.1);
     glutPostRedisplay();
-    glutTimerFunc(0.001, timer_change, 0);
+    glutTimerFunc(1, timer_change, 0);
 }
 
 void display() {

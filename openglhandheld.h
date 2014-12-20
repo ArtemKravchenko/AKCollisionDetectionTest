@@ -17,8 +17,7 @@ class AKOpenGLHandheld : public AKOpenGLInitDelegate {
 
 private:
     AKCollisionDetectionLogic   *_collisionDetectionLogic;
-    AKParticle        *_particle1, *_particle2, *_particle3, *_particle4, *_particle5, *_particle6, *_particle7, *_particle8,
-    *_particle9, *_particle10, *_particle11, *_particle12, *_particle13, *_particle14, *_particle15, *_particle16;
+    vector<AKParticle*>         *particlesArray;
     AKOpenGLHandheld() {};                   // Constructor? (the {} brackets) are needed here.
     // Dont forget to declare these two. You want to make sure they
     // are unaccessable otherwise you may accidently get copies of
