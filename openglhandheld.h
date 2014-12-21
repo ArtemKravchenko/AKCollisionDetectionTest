@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "openglinit.h"
-#include "AKCollisionDetectionLogic.h"
+#include "AKCollisionDetectionLogic2D.h"
 
 class AKOpenGLHandheld : public AKOpenGLInitDelegate {
 
@@ -26,6 +26,7 @@ private:
     void operator=(AKOpenGLHandheld const&); // Don't implement
     
 public:
+    float originX, originY, originZ;
     void setUpModels();
     virtual void handleTimerChanges(double time);
     virtual void redrawObjects();

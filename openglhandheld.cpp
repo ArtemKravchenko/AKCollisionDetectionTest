@@ -16,6 +16,7 @@
 #include <istream>
 #include <sstream>
 #include <fstream>
+#include "AKShapeVisualizer.h"
 
 using namespace std;
 
@@ -86,27 +87,27 @@ vector<string> readArrayOfParticles() {
 void initSystemData()
 {
     AKSystemGenerator::getInstance().COORDINATE_MIN_VALUE = 16;
-    AKSystemGenerator::getInstance().COORDINATE_MAX_VALUE = 584;
+    AKSystemGenerator::getInstance().COORDINATE_MAX_VALUE = 284;//584;
     AKSystemGenerator::getInstance().MASS_MIN_VALUE = 2;
     AKSystemGenerator::getInstance().MASS_MAX_VALUE = 10;
     AKSystemGenerator::getInstance().VELOCITY_MIN_VALUE = 2;
     AKSystemGenerator::getInstance().VELOCITY_MAX_VALUE = 10;
-    AKSystemGenerator::getInstance().RADIUS_MIN_VALUE = 2;
-    AKSystemGenerator::getInstance().RADIUS_MAX_VALUE = 4;
-    AKSystemGenerator::getInstance().generateParticles(1000);
+    AKSystemGenerator::getInstance().RADIUS_MIN_VALUE = 4;
+    AKSystemGenerator::getInstance().RADIUS_MAX_VALUE = 5;
+    AKSystemGenerator::getInstance().generateParticles(100);
     readArrayOfParticles();
 }
 
 void AKOpenGLHandheld::setUpModels()
 {
     initSystemData();
-    _collisionDetectionLogic = new AKCollisionDetectionLogic();
-    AKBox *bounds = new AKBox(2);
-    bounds->center[0] = DISPLAY_WIDTH / 2; bounds->center[1] = DISPLAY_WIDTH / 2;
-    bounds->radius[0] = DISPLAY_HEIGHT / 2; bounds->radius[1] = DISPLAY_HEIGHT / 2;
+    _collisionDetectionLogic = new AKCollisionDetectionLogic2D();
+    AKBox *bounds = new AKBox(3);
+    bounds->center[0] = DISPLAY_WIDTH / 4; bounds->center[1] = DISPLAY_WIDTH / 4; bounds->center[2] = DISPLAY_DEPTH / 4;
+    bounds->radius[0] = DISPLAY_HEIGHT / 4; bounds->radius[1] = DISPLAY_HEIGHT / 4; bounds->radius[2] = DISPLAY_DEPTH / 4;
     
-    _collisionDetectionLogic->setBound(bounds, 1, 1);
-    vector<string> particlesData = readArrayOfParticles(); //arrayOfParticles();
+    _collisionDetectionLogic->setBound(bounds, originX, originY, originZ, 4, 4, 1);
+    vector<string> particlesData = readArrayOfParticles(); //
     AKParticlesList *_particleList = new AKParticlesList();
     this->particlesArray = new vector<AKParticle*>();
     vector<string> *elems;
@@ -115,7 +116,10 @@ void AKOpenGLHandheld::setUpModels()
         elems = new vector<string>();
         particle = new AKParticle(2);
         split(particlesData.at(i), ',', *elems);
-        particle->sphere.center[0] = std::stod(elems->at(0)); particle->sphere.center[1] = std::stod(elems->at(1)); particle->sphere.radius = std::stod(elems->at(2));
+        particle->sphere.center[0] = std::stod(elems->at(0));
+        particle->sphere.center[1] = std::stod(elems->at(1));
+        particle->sphere.center[2] = -10;
+        particle->sphere.radius = std::stod(elems->at(2));
         particle->velocity[0] = std::stod(elems->at(3)); particle->velocity[1] = std::stod(elems->at(4));
         particle->mass = std::stod(elems->at(5));
         this->particlesArray->push_back(particle);
@@ -134,7 +138,7 @@ void AKOpenGLHandheld::redrawObjects()
     int particlesCount = this->particlesArray->size() & INT_MAX;
     for (int i = 0; i < particlesCount; i++) {
         AKParticle *particle = particlesArray->at(i);
-        particle->draw();
+        AKShapeVisualizer::getInstance().visualizeParticle(particle, originX, originY, originZ);
     }
 }
 

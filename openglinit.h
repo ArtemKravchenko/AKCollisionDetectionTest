@@ -9,7 +9,7 @@
 #ifndef AKCollisionDetectionTest_openglinit_h
 #define AKCollisionDetectionTest_openglinit_h
 
-#include "AKDefines.h"
+#include "AKShapeVisualizer.h"
 
 class AKOpenGLInitDelegate {
     

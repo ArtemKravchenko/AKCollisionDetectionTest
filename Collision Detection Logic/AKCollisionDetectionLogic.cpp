@@ -7,13 +7,10 @@
 //
 
 #include <stdio.h>
-#include <iostream>
 #include "AKCollisionDetectionLogic.h"
 #include "AKPhysicsUtils.h"
-#include "AKGeometricUtils.h"
 #include "AKException.h"
 #include "AKDefines.h"
-#include <cmath>
 #include <assert.h>
 
 // Singleton
@@ -68,10 +65,6 @@ void AKCollisionDetectionLogic::updateEventQueueInTime(double time)
     if (!_isBoundsAlreadySet || !_isParticlesAlreadySet)
         return;
     _timeTotal += time;
-    assert(_nextEvent->firstParticle->sphere.center[0] + _nextEvent->firstParticle->sphere.radius < DISPLAY_WIDTH);
-    assert(_nextEvent->firstParticle->sphere.center[0] - _nextEvent->firstParticle->sphere.radius >= -1);
-    assert(_nextEvent->firstParticle->sphere.center[1] + _nextEvent->firstParticle->sphere.radius < DISPLAY_HEIGHT);
-    assert(_nextEvent->firstParticle->sphere.center[1] - _nextEvent->firstParticle->sphere.radius >= -1);
     while (IS_EQUAL_WITH_ERROR(_timeTotal, _timeToEvent)) {
         AKEventType eventType = _nextEvent->eventType;
         _nextEvent->firstParticle->localTime = _timeTotal;
@@ -103,48 +96,6 @@ void AKCollisionDetectionLogic::setParticlesList(AKParticlesList *particlsList)
     _particleList = new AKParticlesList(*particlsList);
     _isParticlesAlreadySet = true;
 }
-void AKCollisionDetectionLogic::setBound(AKBox* bounds, unsigned int row, unsigned int col, unsigned int range)
-{
-    _bounds = new AKBox(*bounds);
-    _cellsCountInCol = col;
-    _cellsCountInRow = row;
-    _cellsCountInRange = range;
-    _cellWidth = (2 * abs(_bounds->center[0])) / _cellsCountInCol;
-    _cellHeight = (2 * abs(_bounds->center[1])) / _cellsCountInRow;
-    if (range > 0) {
-        _cellDepth = (2 * abs(_bounds->center[2])) / _cellsCountInRange;
-    }
-    _isBoundsAlreadySet = true;
-    // Init cells list
-    unsigned int cellsCount = _cellsCountInCol * _cellsCountInRow;
-    if (range != 0) {
-        cellsCount *= _cellsCountInRange;
-    }
-    _cellList = new AKCellsList();
-    for (int i = 0; i < cellsCount; i++) {
-        AKCell cell = AKCell(2);
-        cell.index = i;
-        // Compute cell bounds
-        cell.bounds.center[0] = _cellWidth * (i % _cellsCountInRow) + _cellWidth / 2;
-        cell.bounds.center[1] = _cellHeight * (i / _cellsCountInCol) + _cellHeight / 2;
-        cell.bounds.radius[0] = _cellWidth / 2;
-        cell.bounds.radius[1] = _cellHeight / 2;
-        if (range != 0) {
-            cell.bounds.radius[2] = _cellDepth / 2;
-        }
-        //
-        fillNeighborsForCell(&cell, i);
-        _cellList->push_back(cell);
-    }
-}
-void AKCollisionDetectionLogic::drawCells()
-{
-    int count = _cellList->size() & INT_MAX;
-    for (int i = 0; i < count; i++) {
-        AKCell *cell = &_cellList->at(i);
-        cell->draw();
-    }
-}
 #pragma mark /* -------------------  PRIVATE FUNCTIONS ------------------- */
 inline void AKCollisionDetectionLogic::nextEventFromListEvents()
 {
@@ -154,70 +105,6 @@ inline void AKCollisionDetectionLogic::nextEventFromListEvents()
     }
     _nextEvent = _eventsQueue->delMin();
     _timeToEvent = _nextEvent->timeToEvent;
-}
-inline int AKCollisionDetectionLogic::indexOfCellForParticle(AKParticle const * particle)
-{
-    int indexX, indexY, returnIndex;
-    double pointX = (particle->sphere.center)[0], pointY = (particle->sphere.center)[1];
-    indexX = static_cast<int>(pointX / _cellWidth);
-    indexY = static_cast<int>(pointY / _cellHeight);
-    if (particle->sphere.is2dDimension) {
-        returnIndex = indexY * _cellsCountInRow + indexX;
-    } else {
-        double pointZ = (particle->sphere.center)[2];
-        int indexZ = static_cast<int>(pointZ / _cellDepth);
-        returnIndex = indexZ * _cellsCountInCol * _cellsCountInRow + indexY * _cellsCountInRow + indexX;
-    }
-    assert (returnIndex < _cellList->size() && returnIndex >= 0);
-    return returnIndex;
-}
-void AKCollisionDetectionLogic::fillNeighborsForCell(AKCell *cell, int index)
-{
-    /*
-        Way in which we will move to detect collision with neighborhood partices
-     
-      \    |   /
-       \ __|__/
-        |     |
-     ---|     |---
-        |_____|
-       /   |   \
-      /    |    \
-     */
-
-    int leftNeighbor = -1, leftTopNeighbor = -1, topNeighbor = -1, topRightNeighbor = -1, rightNeightbor = -1, bottomRightNeighbor = -1, bottomNeighbor = -1, leftBottomNeighbor = -1;
-    
-    if (index % _cellsCountInRow != 0) {
-        leftNeighbor = index - 1;
-    }
-    if (index < (_cellsCountInCol - 1) * _cellsCountInRow) {
-        topNeighbor = index + _cellsCountInRow;
-    }
-    if ((index+1) % _cellsCountInRow != 0) {
-        rightNeightbor = index + 1;
-    }
-    if (index >= _cellsCountInRow) {
-        bottomNeighbor = index - _cellsCountInRow;
-    }
-    if (leftNeighbor != - 1 && topNeighbor != - 1) {
-        leftTopNeighbor = topNeighbor - 1;
-    }
-    if (topNeighbor != -1 && rightNeightbor != - 1) {
-        topRightNeighbor = topNeighbor + 1;
-    }
-    if (bottomNeighbor != -1 && rightNeightbor != -1) {
-        bottomRightNeighbor = bottomNeighbor + 1;
-    }
-    if (bottomNeighbor != -1 && leftNeighbor != -1) {
-        leftBottomNeighbor = bottomNeighbor - 1;
-    }
-    int array[8] = { leftNeighbor, leftTopNeighbor, topNeighbor, topRightNeighbor, rightNeightbor, bottomRightNeighbor, bottomNeighbor, leftBottomNeighbor };
-    std::cout << index << " :";
-    for (int i = 0; i < 8; i++) {
-        std::cout << array[i] << ",";
-    }
-    std:cout << std::endl;
-    cell->addNeighbors(array);
 }
 inline AKEvent* AKCollisionDetectionLogic::insertEventInQueue(AKParticle const * firstParticle, AKParticle const * secondParticle)
 {
@@ -234,54 +121,38 @@ inline AKEvent* AKCollisionDetectionLogic::insertEventInQueue(AKParticle const *
     _eventsQueue->insert(event);
     return event;
 }
-inline AKEvent* AKCollisionDetectionLogic::insertEventInQueue(AKParticle const * firstParticle, AKBox const * box)
+inline AKEvent* AKCollisionDetectionLogic::insertEventInQueue(AKParticle const * particle, AKBox const * box)
 {
-    // TODO: After some period of time, smallest time to event has a wrong value, therefore all particles start to left bounds
-    double timeToEvent = std::numeric_limits<double>::max(), tmpTimeToEvent, tmpMeasure;
-    int measure[2];
+    double finalTimeToEvent = std::numeric_limits<double>::max(), tmpTimeToEvent, tmpMeasure;
+    int dim = dimension();
+    int measure[dim];
     double systemMeasure;
     bool tmpIsSystemBound, isSystemBound = false;
     int nextCellIndex = -1;
-    int kof = 0;
+    int sign = 0;
     AKCollisionCompareType array[3] = {AKCollisionCompareXType, AKCollisionCompareYType, AKCollisionCompareZType};
     // Finding the lowest value of collision time with greater X, lesser X, greater Y, lesser Y, greater Z, lesser Z coordinate of box
-    for (int i = 0; i < 2; i++) { // loop through coordinates
+    for (int i = 0; i < dim; i++) { // loop through coordinates
         for (int j = 0; j < 2; j++) { // loop through sign for special coordinates
-            kof = (j == 0) ? 1 : -1;
-            tmpMeasure = box->center[i] + (box->radius[i] * kof);
-            systemMeasure = _bounds->center[i] + (_bounds->radius[i] * kof);
+            sign = (j == 0) ? 1 : -1;
+            tmpMeasure = box->center[i] + (box->radius[i] * sign);
+            systemMeasure = _bounds->center[i] + (_bounds->radius[i] * sign);
             tmpIsSystemBound = (tmpMeasure == systemMeasure);
-            tmpTimeToEvent = AKGeometricUtils::getInstance().getTimeToCollisionBetweenParticleAndBound(firstParticle, tmpMeasure, array[i], tmpIsSystemBound, (j == 0));
-            if (tmpTimeToEvent - firstParticle->localTime > 0 && tmpTimeToEvent < timeToEvent) {
-                timeToEvent = tmpTimeToEvent;
+            tmpTimeToEvent = AKGeometricUtils::getInstance().getTimeToCollisionBetweenParticleAndBound(particle, tmpMeasure, array[i], tmpIsSystemBound, (j == 0));
+            if (tmpTimeToEvent - particle->localTime > 0 && tmpTimeToEvent < finalTimeToEvent) {
+                finalTimeToEvent = tmpTimeToEvent;
                 isSystemBound = tmpIsSystemBound;
-                if (kof == 1) {
-                    if (array[i] == AKCollisionCompareXType) {
-                        measure[0] = 1; measure[1] = 1; nextCellIndex = firstParticle->cellIndex + 1;
-                    } else if(array[i] == AKCollisionCompareYType) {
-                        measure[0] = 1; measure[1] =  0; nextCellIndex = firstParticle->cellIndex + _cellsCountInRow;
-                    } else {
-                        // TODO: Need to implement for 3D case
-                    }
-                } else {
-                    if (array[i] == AKCollisionCompareXType) {
-                        measure[0] = 0; measure[1] = 0; nextCellIndex = firstParticle->cellIndex - 1;
-                    } else if (array[i] == AKCollisionCompareYType) {
-                        measure[0] = 0; measure[1] = 1; nextCellIndex = firstParticle->cellIndex - _cellsCountInRow;
-                    } else {
-                        // TODO: Need to implement for 3D case
-                    }
-                }
+                setMeasure(measure, &nextCellIndex, sign, array[i], particle);
             }
         }
     }
-    AKEvent *event = new AKEvent(2);
-    event->timeToEvent = timeToEvent;
-    event->firstParticle = const_cast<AKParticle*>(firstParticle);
+    AKEvent *event = new AKEvent(dim);
+    event->timeToEvent = finalTimeToEvent;
+    event->firstParticle = const_cast<AKParticle*>(particle);
     event->secondParticle = nullptr;
     if (isSystemBound) {
         event->eventType = AKEventParticleToBoundType;
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < dim; i++) {
             event->measure[i] = measure[i];
         }
         event->nextCellIndex = -1;

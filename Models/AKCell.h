@@ -38,10 +38,6 @@ struct AKCell: public AKVisualizedModel
         }
     }
     
-    virtual void draw() {
-        bounds.draw();
-    }
-    
     bool operator==(const AKCell &other) const {
         int particlesCount = this->insideParticles.size() & INT_MAX;
         for (int i = 0; i < particlesCount; i++) if (*(this->insideParticles.at(i)) != *other.insideParticles.at(i)) return false;

@@ -8,7 +8,7 @@
 
 struct AKVisualizedModel
 {
-    virtual void draw() = 0;
+    //virtual void draw() = 0;
     static bool isVisible;
     DEFINE_IS_EUQAL_WITH_ERROR
 };

@@ -25,10 +25,6 @@ struct AKParticle: public AKVisualizedModel
         localTime = NULL;
         cellIndex = NULL;
     }
-    
-    virtual void draw() {
-        sphere.draw();
-    }
         
     bool operator==(const AKParticle &other) const {
         for (int i = 0; i < 3; i++) {

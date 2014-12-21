@@ -9,18 +9,9 @@
 #ifndef AKCollisionDetectionTest_AKDefines_h
 #define AKCollisionDetectionTest_AKDefines_h
 
-#ifndef AKOpenGLInclude
-#define AKOpenGLInclude
-
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <OpenGL/glext.h>
-#include <GLUT/glut.h>
-
-#endif
-
 const int DISPLAY_WIDTH = 600;
 const int DISPLAY_HEIGHT = 600;
+const int DISPLAY_DEPTH = 600;
 
 #define DEFINE_IS_EUQAL_WITH_ERROR\
         constexpr static const double ERROR = 0.1; \

@@ -19,7 +19,7 @@ void AKOpenGLInit::initOpenGl(int *argc, char ** argv)
     glutInit(argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE| GLUT_RGBA);
     glutInitWindowPosition(200, 0);
-    glutInitWindowSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+    glutInitWindowSize(DISPLAY_WIDTH + 100, DISPLAY_HEIGHT + 100);
     glutCreateWindow("Collision Detection Test");
     glutDisplayFunc(display);
     glutTimerFunc(1, timer_change, 0);
@@ -36,7 +36,7 @@ void AKOpenGLInit::init()
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT, -1, 1);
+    glOrtho(0, DISPLAY_WIDTH + 100, 0, DISPLAY_HEIGHT + 100, -100, 100);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -48,7 +48,10 @@ void timer_change(int time)
 }
 
 void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
     AKOpenGLInit::getInstance().delegate->redrawObjects();
+    gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
+    glDisable(GL_DEPTH_TEST);
     glutSwapBuffers();
 }
