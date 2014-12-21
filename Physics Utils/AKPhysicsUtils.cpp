@@ -45,26 +45,8 @@ void AKPhysicsUtils::changeParticleVelocityAfterCollisionWithAnotherParticle(AKP
     ARRAY_FROM_VECTOR_XD(v1na, particle1->velocity, 2)
     ARRAY_FROM_VECTOR_XD(v2na, particle2->velocity, 2)
 }
-void AKPhysicsUtils::changeParticleVelocityAfterCollisionWithBound(AKParticle* particle, int *bound)
+void AKPhysicsUtils::changeParticleVelocityAfterCollisionWithBound(AKParticle* particle, int *n)
 {
-    double n[3];
-    if (particle->sphere.is2dDimension) {
-        if (bound[0] == 0) {
-            if (bound[1] == 0) {
-                n[0] = 1; n[1] = 0;
-            } else {
-                n[0] = 0, n[1] = -1;
-            }
-        } else {
-            if (bound[1] == 0) {
-                n[0] = 0; n[1] = 1;
-            } else {
-                n[0] = -1; n[1] = 0;
-            }
-        }
-    } else {
-        // TODO: Need to implement for 3D case
-    }
     double      dotProduct  = 0;
     DOT_PRODUCT_FOR_ARRAYS(particle->velocity, n, dotProduct, 2)
     double      dotProductByN[2];

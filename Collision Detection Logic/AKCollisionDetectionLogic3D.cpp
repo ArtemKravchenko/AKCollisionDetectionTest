@@ -21,13 +21,78 @@ int AKCollisionDetectionLogic3D::countOfCell()
 }
 void AKCollisionDetectionLogic3D::fillCell(AKCell& cell, int index)
 {
-    AKCollisionDetectionLogic2D::fillCell(cell, index);
-    cell.bounds.center[2] = _cellDepth * (index / _cellsCountInRange) + _cellDepth / 2;
+    int indexXY = (index + (_cellsCountInCol * _cellsCountInRow)) % (_cellsCountInCol * _cellsCountInRow);
+    AKCollisionDetectionLogic2D::fillCell(cell, indexXY);
+    cell.bounds.center[2] = _cellDepth * (index / (_cellsCountInCol * _cellsCountInRow)) + _cellDepth / 2;
     cell.bounds.radius[2] = _cellDepth / 2;
 }
 void AKCollisionDetectionLogic3D::fillNeighborsForCell(AKCell *cell,int index)
 {
-    // TODO: Need to implement
+    AKCollisionDetectionLogic2D::fillNeighborsForCell(cell, index);
+    int full2DSquare = _cellsCountInCol * _cellsCountInRow;
+    int leftNeighborBack = -1, leftTopNeighborBack = -1, topNeighborBack = -1, topRightNeighborBack = -1, rightNeightborBack = -1, bottomRightNeighborBack = -1, bottomNeighborBack = -1, leftBottomNeighborBack = -1, middleNeighborBack = -1,
+    leftNeighborFront = -1, leftTopNeighborFront = -1, topNeighborFront = -1, topRightNeighborFront = -1, rightNeightborFront = -1, bottomRightNeighborFront = -1, bottomNeighborFront = -1, leftBottomNeighborFront = -1, middleNeighBorFront = -1;
+    if (index >= full2DSquare) {
+        middleNeighborBack = index - full2DSquare;
+        if (index % _cellsCountInRow != 0) {
+            leftNeighborBack = index - 1 - full2DSquare;
+        }
+        if (index < (_cellsCountInCol - 1) * _cellsCountInRow) {
+            topNeighborBack = index + _cellsCountInRow - full2DSquare;
+        }
+        if ((index+1) % _cellsCountInRow != 0) {
+            rightNeightborBack = index + 1 - full2DSquare;
+        }
+        if (index >= _cellsCountInRow) {
+            bottomNeighborBack = index - _cellsCountInRow - full2DSquare;
+        }
+        if (leftNeighborBack != - 1 && topNeighborBack != - 1) {
+            leftTopNeighborBack = topNeighborBack - 1 - full2DSquare;
+        }
+        if (topNeighborBack != -1 && rightNeightborBack != - 1) {
+            topRightNeighborBack = topNeighborBack + 1 - full2DSquare;
+        }
+        if (bottomNeighborBack != -1 && rightNeightborBack != -1) {
+            bottomRightNeighborBack = bottomNeighborBack + 1 - full2DSquare;
+        }
+        if (bottomNeighborBack != -1 && leftNeighborBack != -1) {
+            leftBottomNeighborBack = bottomNeighborBack - 1 - full2DSquare;
+        }
+    }
+    if (index < full2DSquare * (_cellsCountInRange - 1)) {
+        middleNeighBorFront = index + full2DSquare;
+        if (index % _cellsCountInRow != 0) {
+            leftNeighborFront = index - 1 + full2DSquare;
+        }
+        if (index < (_cellsCountInCol - 1) * _cellsCountInRow) {
+            topNeighborFront = index + _cellsCountInRow + full2DSquare;
+        }
+        if ((index+1) % _cellsCountInRow != 0) {
+            rightNeightborFront = index + 1 + full2DSquare;
+        }
+        if (index >= _cellsCountInRow) {
+            bottomNeighborFront = index - _cellsCountInRow + full2DSquare;
+        }
+        if (leftNeighborFront != - 1 && topNeighborFront != - 1) {
+            leftTopNeighborFront = topNeighborFront - 1 + full2DSquare;
+        }
+        if (topNeighborFront != -1 && rightNeightborFront != - 1) {
+            topRightNeighborFront = topNeighborFront + 1 + full2DSquare;
+        }
+        if (bottomNeighborFront != -1 && rightNeightborFront != -1) {
+            bottomRightNeighborFront = bottomNeighborFront + 1 + full2DSquare;
+        }
+        if (bottomNeighborFront != -1 && leftNeighborFront != -1) {
+            leftBottomNeighborFront = bottomNeighborFront - 1 + full2DSquare;
+        }
+    }
+    int array[18] = { leftNeighborBack, leftTopNeighborBack, topNeighborBack, topRightNeighborBack, rightNeightborBack, bottomRightNeighborBack, bottomNeighborBack, leftBottomNeighborBack, middleNeighborBack, leftNeighborFront, leftTopNeighborFront, topNeighborFront, topRightNeighborFront, rightNeightborFront, bottomRightNeighborFront, bottomNeighborFront, leftBottomNeighborFront, middleNeighBorFront };
+    std::cout << index << " :";
+    for (int i = 0; i < 18; i++) {
+        std::cout << array[i] << ",";
+        cell->addNeighborAtIndex(array[i]);
+    }
+    std:cout << std::endl;
 }
 #pragma mark - Fill event in queue
 inline int AKCollisionDetectionLogic3D::dimension()
@@ -36,15 +101,33 @@ inline int AKCollisionDetectionLogic3D::dimension()
 }
 inline void AKCollisionDetectionLogic3D::setMeasure(int* measure, int*nextIndexCell, int sign, AKCollisionCompareType compareType, AKParticle const *particle)
 {
-    // TODO: Need to implement
+    AKCollisionDetectionLogic2D::setMeasure(measure, nextIndexCell, sign, compareType, particle);
+    if (sign == 1) {
+        if (compareType == AKCollisionCompareXType) {
+            measure[2] = 0;
+        } else if(compareType == AKCollisionCompareYType) {
+            measure[2] = 0;
+        } else {
+            measure[0] = 0; measure[1] = 0; measure[2] = -1; *nextIndexCell = particle->cellIndex + _cellsCountInRow*_cellsCountInCol;
+        }
+    } else {
+        if (compareType == AKCollisionCompareXType) {
+            measure[2] = 0;
+        } else if (compareType == AKCollisionCompareYType) {
+            measure[2] = 0;
+        } else {
+            measure[0] = 0; measure[1] = 0; measure[2] = 1; *nextIndexCell = particle->cellIndex - _cellsCountInRow*_cellsCountInCol;
+        }
+    }
 }
 #pragma mark - /* ---------- PUBLIC ---------- */
 inline int AKCollisionDetectionLogic3D::indexOfCellForParticle(AKParticle const * particle)
 {
     int index2D = AKCollisionDetectionLogic2D::indexOfCellForParticle(particle);
     double pointZ = (particle->sphere.center)[2];
-    int indexZ = pointZ / _cellsCountInRange;
+    int indexZ = pointZ / _cellDepth;
     int returnIndex = _cellsCountInCol * _cellsCountInRow * indexZ + index2D;
+    assert (returnIndex < _cellList->size() && returnIndex >= 0);
     return returnIndex;
 }
 void AKCollisionDetectionLogic3D::updateEventQueueInTime(double time)
@@ -57,7 +140,7 @@ void AKCollisionDetectionLogic3D::setBound(AKBox* bounds, float originX, float o
 {
     _originZ = originZ;
     _cellsCountInRange = range;
-    _cellDepth = (abs(_bounds->center[2]) + _bounds->radius[2]) / _cellsCountInRange;
+    _cellDepth = (abs(bounds->center[2]) + bounds->radius[2]) / _cellsCountInRange;
     _isBoundsAlreadySet = true;
     AKCollisionDetectionLogic2D::setBound(bounds, originX, originY, originZ, row, col, range);
 }

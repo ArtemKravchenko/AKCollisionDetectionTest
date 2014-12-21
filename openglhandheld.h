@@ -11,13 +11,16 @@
 
 #include <stdio.h>
 #include "openglinit.h"
-#include "AKCollisionDetectionLogic2D.h"
+#include "AKCollisionDetectionLogic3D.h"
 
 class AKOpenGLHandheld : public AKOpenGLInitDelegate {
 
 private:
     AKCollisionDetectionLogic   *_collisionDetectionLogic;
     vector<AKParticle*>         *particlesArray;
+    
+    void initSystemData();
+    // SINGLTONE
     AKOpenGLHandheld() {};                   // Constructor? (the {} brackets) are needed here.
     // Dont forget to declare these two. You want to make sure they
     // are unaccessable otherwise you may accidently get copies of
@@ -27,9 +30,13 @@ private:
     
 public:
     float originX, originY, originZ;
+    bool is2DDimension;
     void setUpModels();
     virtual void handleTimerChanges(double time);
     virtual void redrawObjects();
+    
+    
+    // SINGLTONE
     static AKOpenGLHandheld& getInstance()
     {
         static AKOpenGLHandheld    instance; // Guaranteed to be destroyed.

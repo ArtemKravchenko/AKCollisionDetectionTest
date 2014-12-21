@@ -18,10 +18,18 @@
 #include "CoreFoundation/CoreFoundation.h"
 #endif
 
+
+typedef enum {
+    AKSpecialCoordinateXType = 1,
+    AKSpecialCoordinateYType = 2,
+    AKSpecialCoordinateZType = 3
+} AKSpecialCoordinateType;
+
 using namespace std;
 
 bool isCircleIntersectWithAlreadyExistingCircles();
 bool isCirclesIntersectIn2D(double x1, double y1, double r1, double x2, double y2, double r2);
+bool isCirclesIntersectIn3D(double x1, double y1, double r1, double x2, double y2, double r2, double z1, double z2);
 
 class AKSystemGenerator {
 
@@ -30,8 +38,8 @@ private:
     int countOfParticles;
     int actualCountOfParticles;
     
-    double *xArr, *yArr, *rArr;
-    double x, y, radius, vx, vy, mass;
+    double *xArr, *yArr, *zArr, *rArr;
+    double x, y, z, radius, vx, vy, vz, mass;
     
     AKSystemGenerator() {};                   // Constructor? (the {} brackets) are needed here.
     // Dont forget to declare these two. You want to make sure they
@@ -42,44 +50,71 @@ private:
     
     void generateXCoordinate()
     {
-        x = rand() % 550;
-        while (x == 0 || x < COORDINATE_MIN_VALUE || x > COORDINATE_MAX_VALUE) {
-            x = rand() % 550;
+        if (SPECIAL_COORDINATE_TYPE != AKSpecialCoordinateXType) {
+            x = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
+            while (x == 0 || x < COORDINATE_MIN_VALUE || x > COORDINATE_MAX_VALUE) {
+                x = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
+            }
+        } else {
+            x = SPECIAL_COORDINATE;
         }
     }
     void generateYCoordinate()
     {
-        y = rand() % 550;
-        while (y == 0 || y < COORDINATE_MIN_VALUE || y > COORDINATE_MAX_VALUE) {
-            y = rand() % 550;
+        if (SPECIAL_COORDINATE_TYPE != AKSpecialCoordinateYType) {
+            y = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
+            while (y == 0 || y < COORDINATE_MIN_VALUE || y > COORDINATE_MAX_VALUE) {
+                y = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
+            }
+        } else {
+            y = SPECIAL_COORDINATE;
+        }
+    }
+    void generateZCoordinate()
+    {
+        if (SPECIAL_COORDINATE_TYPE != AKSpecialCoordinateZType) {
+            z = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
+            while (z == 0 || z < COORDINATE_MIN_VALUE || z > COORDINATE_MAX_VALUE) {
+                z = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
+            }
+        } else {
+            z = SPECIAL_COORDINATE;
         }
     }
     void generateMass()
     {
-        mass = rand() % 550;
+        mass = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
         while (mass == 0 || mass < MASS_MIN_VALUE || mass > MASS_MAX_VALUE) {
-            mass = rand() % 550;
+            mass = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
         }
     }
     void generateRadius()
     {
         radius = rand() % 20;
-        while (radius > x || radius > y || radius < RADIUS_MIN_VALUE || radius > RADIUS_MAX_VALUE) {
+        bool unsuccessWithDimension = (is2DDimension) ? false : radius > z;
+        while (radius > x || radius > y || unsuccessWithDimension || radius < RADIUS_MIN_VALUE || radius > RADIUS_MAX_VALUE) {
             radius = rand() % 20;
         }
     }
     void generateSpeedX()
     {
-        vx = rand() % 550;
+        vx = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
         while (vx == 0 || vx < VELOCITY_MIN_VALUE || vx > VELOCITY_MAX_VALUE) {
-            vx = rand() % 550;
+            vx = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
         }
     }
     void generateSpeedY()
     {
-        vy = rand() % 550;
+        vy = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
         while (vy == 0 || vy < VELOCITY_MIN_VALUE || vy > VELOCITY_MAX_VALUE) {
-            vy = rand() % 550;
+            vy = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
+        }
+    }
+    void generateSpeedZ()
+    {
+        vz = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
+        while (vz == 0 || vz < VELOCITY_MIN_VALUE || vz > VELOCITY_MAX_VALUE) {
+            vz = rand() % (int)COORDINATE_MAX_VALUE - RADIUS_MAX_VALUE - 1;
         }
     }
     
@@ -87,6 +122,9 @@ private:
     {
         generateSpeedX();
         generateSpeedY();
+        if (allowZMoving && !is2DDimension) {
+            generateSpeedZ();
+        }
         generateMass();
     }
     
@@ -94,6 +132,9 @@ private:
     {
         generateXCoordinate();
         generateYCoordinate();
+        if (!is2DDimension) {
+            generateZCoordinate();
+        }
         generateRadius();
     }
     
@@ -103,8 +144,14 @@ private:
             return false;
         }
         for (int i = 0; i < actualCountOfParticles; i++) {
-            if (isCirclesIntersectIn2D(x, y, radius, xArr[i], yArr[i], rArr[i])) {
-                return true;
+            if (is2DDimension) {
+                if (isCirclesIntersectIn2D(x, y, radius, xArr[i], yArr[i], rArr[i])) {
+                    return true;
+                }
+            } else {
+                if(isCirclesIntersectIn2D(x, y, radius, xArr[i], yArr[i], rArr[i])) {//if (isCirclesIntersectIn3D(x, y, radius, xArr[i], yArr[i], rArr[i], z, zArr[i])) {
+                    return true;
+                }
             }
         }
         return false;
@@ -115,6 +162,11 @@ private:
         double deltaX = x1 - x2, deltaY = y1 - y2;
         double deltaR = r1 + r2;
         return deltaX*deltaX + deltaY*deltaY <= deltaR * deltaR;
+    }
+    bool isCirclesIntersectIn3D(double x1, double y1, double r1, double x2, double y2, double r2, double z1, double z2)
+    {
+        // TODO: Need to implement
+        return false;
     }
     void convertDataInJSON()
     {
@@ -147,8 +199,15 @@ private:
                 generateVelocityAndMass();
                 xArr[actualCountOfParticles] = x;
                 yArr[actualCountOfParticles] = y;
+                if (!is2DDimension) {
+                    zArr[actualCountOfParticles] = z;
+                }
                 rArr[actualCountOfParticles] = radius;
-                myfile << x << "," << y << "," << radius << "," << vx << "," << vy << "," << mass;
+                myfile << x << "," << y << ",";
+                if (!is2DDimension) {
+                    myfile << z << ",";
+                }
+                myfile << radius << "," << vx << "," << vy << "," << mass;
                 actualCountOfParticles++;
                 if (actualCountOfParticles < countOfParticles) {
                     myfile << "|";
@@ -164,24 +223,29 @@ private:
     
 public:
     double MASS_MIN_VALUE, MASS_MAX_VALUE, VELOCITY_MIN_VALUE, VELOCITY_MAX_VALUE,
-        COORDINATE_MIN_VALUE, COORDINATE_MAX_VALUE, RADIUS_MIN_VALUE, RADIUS_MAX_VALUE;
+        COORDINATE_MIN_VALUE, COORDINATE_MAX_VALUE, RADIUS_MIN_VALUE, RADIUS_MAX_VALUE, SPECIAL_COORDINATE;
+    bool is2DDimension, allowZMoving;
+    int SPECIAL_COORDINATE_TYPE = -1;
     void generateParticles(unsigned int count){
         cout << "UTILITY READY TO INSTALL SYSTEM'S ARGUMENTS"<< endl;
         cout << "Please enter the " << endl;
 #pragma mark - READ DIMENSION
         cout << "Dimension: ";
-        dimension = 2;
-        cout << "Dimension = 2" << endl;
+        dimension = (is2DDimension) ? 2 : 3;
+        cout << "Dimension = " << dimension << endl;
 #pragma mark - READ COUNT OF PARTICLES
         cout << "Count of particles: ";
         string inputCountOfParticles = "";
         countOfParticles = count;
         xArr = new double[countOfParticles];
         yArr = new double[countOfParticles];
+        zArr = new double[countOfParticles];
         rArr = new double[countOfParticles];
         cout << "Count of particles = " << countOfParticles << endl;
 #pragma mark - FILLING ARRAY OF PARTICLES
-        
+        if ((SPECIAL_COORDINATE < COORDINATE_MIN_VALUE || SPECIAL_COORDINATE > COORDINATE_MAX_VALUE) && is2DDimension) {
+            SPECIAL_COORDINATE = (COORDINATE_MIN_VALUE + COORDINATE_MAX_VALUE) / 2;
+        }
         convertDataInJSON();
     }
     static AKSystemGenerator& getInstance()

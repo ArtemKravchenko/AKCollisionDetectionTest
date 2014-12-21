@@ -70,9 +70,9 @@ void AKCollisionDetectionLogic2D::fillNeighborsForCell(AKCell *cell,int index)
     std::cout << index << " :";
     for (int i = 0; i < 8; i++) {
         std::cout << array[i] << ",";
+        cell->addNeighborAtIndex(array[i]);
     }
     std:cout << std::endl;
-    cell->addNeighbors(array);
 }
 #pragma mark - Fill event in queue
 inline int AKCollisionDetectionLogic2D::dimension()
@@ -83,15 +83,15 @@ inline void AKCollisionDetectionLogic2D::setMeasure(int* measure, int* nextIndex
 {
     if (sign == 1) {
         if (compareType == AKCollisionCompareXType) {
-            measure[0] = 1; measure[1] = 1; *nextIndexCell = particle->cellIndex + 1;
+            measure[0] = -1; measure[1] = 0; *nextIndexCell = particle->cellIndex + 1;
         } else if(compareType == AKCollisionCompareYType) {
-            measure[0] = 1; measure[1] =  0; *nextIndexCell = particle->cellIndex + _cellsCountInRow;
+            measure[0] = 0; measure[1] =  1; *nextIndexCell = particle->cellIndex + _cellsCountInRow;
         }
     } else {
         if (compareType == AKCollisionCompareXType) {
-            measure[0] = 0; measure[1] = 0; *nextIndexCell = particle->cellIndex - 1;
+            measure[0] = 1; measure[1] = 0; *nextIndexCell = particle->cellIndex - 1;
         } else if (compareType == AKCollisionCompareYType) {
-            measure[0] = 0; measure[1] = 1; *nextIndexCell = particle->cellIndex - _cellsCountInRow;
+            measure[0] = 0; measure[1] = -1; *nextIndexCell = particle->cellIndex - _cellsCountInRow;
         }
     }
 }

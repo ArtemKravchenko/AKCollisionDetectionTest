@@ -58,7 +58,6 @@ protected:
     int                 _cellsCountInCol;               // Number of cells in each imaginary column
     double              _cellWidth;                     // Width of cell
     double              _cellHeight;                    // Height of cell
-    double              _cellDepth;                     // Depth of cell
     AKEvent             *_nextEvent;                    // Event that happens in time with smallest interval
     double              _timeTotal;                     // Counter of globale time
     double              _timeToEvent;                   // Time to event occurs

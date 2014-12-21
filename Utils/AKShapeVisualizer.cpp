@@ -8,6 +8,7 @@
 
 #include "AKShapeVisualizer.h"
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -18,9 +19,8 @@ void AKShapeVisualizer::visualizeParticle(AKParticle* particle, float originX, f
     float x = particle->sphere.center[0] + originX;
     float y = particle->sphere.center[1] + originY;
     float z = 0;
-    z = particle->sphere.center[2] + originZ;
     if (!particle->sphere.is2dDimension) {
-        z = particle->sphere.center[2] + originZ;
+        z = 0 - abs(particle->sphere.center[2]) - (originZ);
     }
     glColor3f(1.0, 0.0, 0.0);
     glTranslatef(x, y, z);
@@ -104,7 +104,7 @@ void AKShapeVisualizer::visualizeCell(AKCell* cell, float originX, float originY
         glVertex3f(rightX, topY, nearZ);
         glVertex3f(rightX, topY, furtherZ);
     }
-    cout << endl;
+    //cout << endl;
     glEnd();
 #endif
 }

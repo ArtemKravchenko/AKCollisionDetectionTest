@@ -53,7 +53,7 @@ void AKCollisionDetectionLogic::fillEventsInQueue(unsigned int capacity)
             box = &cell->bounds;
             event = insertEventInQueue(firstParticle, box);
             // 3. Compute events with particles inside current cell and neighbor cell
-            neighborsIndexes = cell->neighbors;
+            neighborsIndexes = &cell->neighbors[0];
             addEventsForParticleAndParticlesInNeighborCells(firstParticle, neighborsIndexes);
         }
     }
@@ -112,7 +112,7 @@ inline AKEvent* AKCollisionDetectionLogic::insertEventInQueue(AKParticle const *
     if (isnan(timeToEvent) || timeToEvent - firstParticle->localTime < 0) {
         return nullptr;
     }
-    AKEvent *event = new AKEvent(2);
+    AKEvent *event = new AKEvent((firstParticle->sphere.is2dDimension) ? 2 : 3);
     event->timeToEvent = timeToEvent;
     event->firstParticle = const_cast<AKParticle*>(firstParticle);
     event->secondParticle = const_cast<AKParticle*>(secondParticle);
@@ -280,7 +280,7 @@ inline void AKCollisionDetectionLogic::addEventsRelatedToParticle(AKParticle* pa
     box = &cell->bounds;
     event = insertEventInQueue(particle, box);
     // 3.3
-    neighborsIndexes = cell->neighbors;
+    neighborsIndexes = &cell->neighbors[0];
     addEventsForParticleAndParticlesInNeighborCells(particle, neighborsIndexes);
 }
 inline void AKCollisionDetectionLogic::removeEventsForParticle(AKParticle* particle) // O(n)

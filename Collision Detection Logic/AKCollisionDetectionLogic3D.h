@@ -17,6 +17,7 @@ class AKCollisionDetectionLogic3D : public AKCollisionDetectionLogic2D {
 protected:
     float           _originZ;                       // The most nearest coordinate of system
     int             _cellsCountInRange;             // Number of cells in each imaginary range
+    double          _cellDepth;                     // Depth of cell
     
     virtual void    setSystemBounds(AKBox* bounds);
     virtual int     countOfCell();

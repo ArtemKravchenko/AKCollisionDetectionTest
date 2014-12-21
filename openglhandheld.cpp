@@ -83,47 +83,68 @@ vector<string> readArrayOfParticles() {
     }
     return *elems;
 }
-
-void initSystemData()
+void AKOpenGLHandheld::initSystemData()
 {
+    AKSystemGenerator::getInstance().is2DDimension = is2DDimension;
     AKSystemGenerator::getInstance().COORDINATE_MIN_VALUE = 16;
-    AKSystemGenerator::getInstance().COORDINATE_MAX_VALUE = 284;//584;
+    AKSystemGenerator::getInstance().COORDINATE_MAX_VALUE = 300;//584;
     AKSystemGenerator::getInstance().MASS_MIN_VALUE = 2;
     AKSystemGenerator::getInstance().MASS_MAX_VALUE = 10;
     AKSystemGenerator::getInstance().VELOCITY_MIN_VALUE = 2;
     AKSystemGenerator::getInstance().VELOCITY_MAX_VALUE = 10;
     AKSystemGenerator::getInstance().RADIUS_MIN_VALUE = 4;
     AKSystemGenerator::getInstance().RADIUS_MAX_VALUE = 5;
+    if (!is2DDimension) {
+        AKSystemGenerator::getInstance().SPECIAL_COORDINATE = 20;
+    }
+    AKSystemGenerator::getInstance().SPECIAL_COORDINATE_TYPE = AKSpecialCoordinateZType;
     AKSystemGenerator::getInstance().generateParticles(100);
-    readArrayOfParticles();
 }
 
 void AKOpenGLHandheld::setUpModels()
 {
     initSystemData();
-    _collisionDetectionLogic = new AKCollisionDetectionLogic2D();
-    AKBox *bounds = new AKBox(3);
-    bounds->center[0] = DISPLAY_WIDTH / 4; bounds->center[1] = DISPLAY_WIDTH / 4; bounds->center[2] = DISPLAY_DEPTH / 4;
-    bounds->radius[0] = DISPLAY_HEIGHT / 4; bounds->radius[1] = DISPLAY_HEIGHT / 4; bounds->radius[2] = DISPLAY_DEPTH / 4;
+    if (is2DDimension) {
+        _collisionDetectionLogic = new AKCollisionDetectionLogic2D();
+    } else {
+        _collisionDetectionLogic = new AKCollisionDetectionLogic3D();
+    }
     
-    _collisionDetectionLogic->setBound(bounds, originX, originY, originZ, 4, 4, 1);
+    AKBox *bounds = new AKBox((is2DDimension) ? 2 :3);
+    bounds->center[0] = DISPLAY_WIDTH / 4; bounds->center[1] = DISPLAY_WIDTH / 4;
+    if (!is2DDimension) {
+        bounds->center[2] = DISPLAY_DEPTH / 4;
+    }
+    bounds->radius[0] = DISPLAY_HEIGHT / 4; bounds->radius[1] = DISPLAY_HEIGHT / 4;
+    if (!is2DDimension) {
+        bounds->radius[2] = DISPLAY_DEPTH / 4;
+    }
+    
+    _collisionDetectionLogic->setBound(bounds, originX, originY, originZ, 2, 2, 1);
     vector<string> particlesData = readArrayOfParticles(); //
     AKParticlesList *_particleList = new AKParticlesList();
     this->particlesArray = new vector<AKParticle*>();
     vector<string> *elems;
     AKParticle* particle;
+    int index = 0;
     for (int i = 0; i < particlesData.size(); i++) {
         elems = new vector<string>();
-        particle = new AKParticle(2);
+        particle = new AKParticle((is2DDimension) ? 2 : 3);
         split(particlesData.at(i), ',', *elems);
-        particle->sphere.center[0] = std::stod(elems->at(0));
-        particle->sphere.center[1] = std::stod(elems->at(1));
-        particle->sphere.center[2] = -10;
-        particle->sphere.radius = std::stod(elems->at(2));
-        particle->velocity[0] = std::stod(elems->at(3)); particle->velocity[1] = std::stod(elems->at(4));
-        particle->mass = std::stod(elems->at(5));
+        particle->sphere.center[0] = std::stod(elems->at(index++));
+        particle->sphere.center[1] = std::stod(elems->at(index++));
+        if (is2DDimension) {
+            particle->sphere.center[2] = -10;
+        } else {
+            particle->sphere.center[2] = std::stod(elems->at(index++));
+        }
+        
+        particle->sphere.radius = std::stod(elems->at(index++));
+        particle->velocity[0] = std::stod(elems->at(index++)); particle->velocity[1] = std::stod(elems->at(index++));
+        particle->mass = std::stod(elems->at(index++));
         this->particlesArray->push_back(particle);
         _particleList->push_back(particle);
+        index = 0;
     }
     
     _collisionDetectionLogic->setParticlesList(_particleList);

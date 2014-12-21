@@ -11,18 +11,23 @@ using namespace std;
 #include "AKParticle.h"
 
 
-static const int NEIGHBORS_COUNT = 8;
+static const int NEIGHBORS_COUNT_2D = 8;
+static const int NEIGHBORS_COUNT_3D = 26;
 typedef std::vector<AKParticle*> AKParticlesList;
+typedef std::vector<int> AKNeigbors;
 
 struct AKCell: public AKVisualizedModel
 {
-    int             neighbors[NEIGHBORS_COUNT];
+    AKNeigbors      neighbors;
+    int             neigborsCount;
     int             index;
     AKBox           bounds;
     AKParticlesList insideParticles;
     
-    AKCell(unsigned int dimension) : bounds(dimension) {  }
-    ~AKCell() {}
+    AKCell(unsigned int dimension) : bounds(dimension) {
+        neigborsCount = (bounds.is2dDimension) ? NEIGHBORS_COUNT_2D : NEIGHBORS_COUNT_3D;
+    }
+    ~AKCell() { }
     
     void addParticle(AKParticle* particle)
     {
@@ -31,17 +36,20 @@ struct AKCell: public AKVisualizedModel
         }
         insideParticles.push_back(particle);
     }
-    void addNeighbors(int array[NEIGHBORS_COUNT])
+    void addNeighborAtIndex(unsigned int neighbor)
     {
-        for (int i = 0; i < NEIGHBORS_COUNT; i++) {
-            neighbors[i] = array[i];
+        if (neighbors.size() == 0) {
+            neighbors = AKNeigbors();
+        }
+        if (neighbors.size() < neigborsCount) {
+            neighbors.push_back(neighbor);
         }
     }
     
     bool operator==(const AKCell &other) const {
         int particlesCount = this->insideParticles.size() & INT_MAX;
         for (int i = 0; i < particlesCount; i++) if (*(this->insideParticles.at(i)) != *other.insideParticles.at(i)) return false;
-        for (int i = 0; i < NEIGHBORS_COUNT; i++) if (this->neighbors[i] != other.neighbors[i]) return false;
+        for (int i = 0; i < neigborsCount; i++) if (this->neighbors[i] != other.neighbors[i]) return false;
         return (this->index == other.index) && (this->bounds == other.bounds);
     }
     
