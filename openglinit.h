@@ -14,8 +14,12 @@
 class AKOpenGLInitDelegate {
     
 public:
-    virtual void handleTimerChanges(double time) { /* Need to overload in inheritance classes */ }
-    virtual void redrawObjects() { /*  Need to overload in inheritance classes */ }
+    virtual void handleTimerChanges(double time) = 0;
+    virtual void redrawObjects() = 0;
+    virtual bool getIs2Dimension() = 0;
+    virtual float getDisplayWidth() = 0;
+    virtual float getDisplayHeight() = 0;
+    virtual float getDisplayDepth() = 0;
 };
 
 class AKOpenGLInit {    
@@ -27,6 +31,8 @@ private:
     // your singleton appearing.
     AKOpenGLInit(AKOpenGLInit const&);              // Don't Implement
     void operator=(AKOpenGLInit const&); // Don't implement
+    static void display();
+    static void timer_change(int time);
     
 public:
     void initOpenGl(int *argc, char ** argv);

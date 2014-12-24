@@ -149,7 +149,7 @@ private:
                     return true;
                 }
             } else {
-                if(isCirclesIntersectIn2D(x, y, radius, xArr[i], yArr[i], rArr[i])) {//if (isCirclesIntersectIn3D(x, y, radius, xArr[i], yArr[i], rArr[i], z, zArr[i])) {
+                if (isCirclesIntersectIn3D(x, y, radius, xArr[i], yArr[i], rArr[i], z, zArr[i])) {
                     return true;
                 }
             }
@@ -165,8 +165,9 @@ private:
     }
     bool isCirclesIntersectIn3D(double x1, double y1, double r1, double x2, double y2, double r2, double z1, double z2)
     {
-        // TODO: Need to implement
-        return false;
+        double deltaX = x1 - x2, deltaY = y1 - y2, deltaZ = z1 - z2;
+        double deltaR = r1 + r2;
+        return deltaX*deltaX + deltaY*deltaY + deltaZ*deltaZ <= deltaR * deltaR;
     }
     void convertDataInJSON()
     {

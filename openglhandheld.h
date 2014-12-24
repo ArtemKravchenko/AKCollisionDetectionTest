@@ -17,7 +17,9 @@ class AKOpenGLHandheld : public AKOpenGLInitDelegate {
 
 private:
     AKCollisionDetectionDiscreteTimeLogic   *_collisionDetectionLogic;
-    vector<AKParticle*>         *particlesArray;
+    vector<AKParticle*>                     *_particlesArray;
+    float                                   _displayWidth, _displayHeight, _displayDepth;
+    bool                                    _displayWidthWasSet, _displayHeightWasSet, _displayDepthWasSet;
     
     void initSystemData();
     // SINGLTONE
@@ -29,13 +31,20 @@ private:
     void operator=(AKOpenGLHandheld const&); // Don't implement
     
 public:
-    float originX, originY, originZ;
-    bool is2DDimension;
-    void setUpModels();
-    virtual void handleTimerChanges(double time);
-    virtual void redrawObjects();
-    
-    
+    float                                   originX, originY, originZ;
+    bool                                    is2DDimension;
+    void                                    setUpModels();
+    /* ----------------------------- DELEGATE IMPLEMENTATION ----------------------------- */
+    virtual void                            handleTimerChanges(double time);
+    virtual void                            redrawObjects();
+    virtual bool                            getIs2Dimension();
+    virtual float                           getDisplayWidth();
+    virtual float                           getDisplayHeight();
+    virtual float                           getDisplayDepth();
+    /*------------------------------------------------------------------------------------*/
+    void                                    setDisplayWidth(float);
+    void                                    setDisplayHeight(float);
+    void                                    setDisplayDepth(float);
     // SINGLTONE
     static AKOpenGLHandheld& getInstance()
     {
