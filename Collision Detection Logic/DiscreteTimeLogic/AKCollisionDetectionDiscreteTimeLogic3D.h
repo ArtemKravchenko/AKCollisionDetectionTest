@@ -1,18 +1,18 @@
 //
-//  AKCollisionDetectionLogic3D.h
+//  AKCollisionDetectionDiscreteTimeLogic3D.h
 //  AKCollisionDetectionTest
 //
 //  Created by Artem Kravchenko on 12/21/14.
 //  Copyright (c) 2014 ShowTime. All rights reserved.
 //
 
-#ifndef __AKCollisionDetectionTest__AKCollisionDetectionLogic3D__
-#define __AKCollisionDetectionTest__AKCollisionDetectionLogic3D__
+#ifndef __AKCollisionDetectionTest__AKCollisionDetectionDiscreteTimeLogic3D__
+#define __AKCollisionDetectionTest__AKCollisionDetectionDiscreteTimeLogic3D__
 
 #include <stdio.h>
-#include "AKCollisionDetectionLogic2D.h"
+#include "AKCollisionDetectionDiscreteTimeLogic2D.h"
 
-class AKCollisionDetectionLogic3D : public AKCollisionDetectionLogic2D {
+class AKCollisionDetectionDiscreteTimeLogic3D : public AKCollisionDetectionDiscreteTimeLogic2D {
 
 protected:
     float           _originZ;                       // The most nearest coordinate of system
@@ -33,4 +33,4 @@ public:
     virtual void    drawCells();
 };
 
-#endif /* defined(__AKCollisionDetectionTest__AKCollisionDetectionLogic3D__) */
+#endif /* defined(__AKCollisionDetectionTest__AKCollisionDetectionDiscreteTimeLogic3D__) */

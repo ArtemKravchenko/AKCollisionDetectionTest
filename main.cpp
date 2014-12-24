@@ -18,7 +18,7 @@ int main(int argc, char ** argv) {
     AKOpenGLHandheld::getInstance().originY = 200;
     AKOpenGLHandheld::getInstance().originZ = 0;
     AKOpenGLInit::getInstance().delegate = &AKOpenGLHandheld::getInstance();
-    AKOpenGLHandheld::getInstance().is2DDimension = false;
+    AKOpenGLHandheld::getInstance().is2DDimension = true;
     AKOpenGLHandheld::getInstance().setUpModels();
     AKOpenGLInit::getInstance().initOpenGl(&argc, argv);
     AKOpenGLInit::getInstance().startModellingProcess();

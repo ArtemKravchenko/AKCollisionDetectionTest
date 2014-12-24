@@ -91,8 +91,8 @@ private:
     void generateRadius()
     {
         radius = rand() % 20;
-        bool unsuccessWithDimension = (is2DDimension) ? false : radius > z;
-        while (radius > x || radius > y || unsuccessWithDimension || radius < RADIUS_MIN_VALUE || radius > RADIUS_MAX_VALUE) {
+        //bool unsuccessWithDimension = (is2DDimension) ? false : radius > z;
+        while (radius > x || radius > y || radius < RADIUS_MIN_VALUE || radius > RADIUS_MAX_VALUE) {
             radius = rand() % 20;
         }
     }
@@ -122,7 +122,7 @@ private:
     {
         generateSpeedX();
         generateSpeedY();
-        if (allowZMoving && !is2DDimension) {
+        if (ALLOW_Z_MOVING && !is2DDimension) {
             generateSpeedZ();
         }
         generateMass();
@@ -207,7 +207,11 @@ private:
                 if (!is2DDimension) {
                     myfile << z << ",";
                 }
-                myfile << radius << "," << vx << "," << vy << "," << mass;
+                myfile << radius << "," << vx << "," << vy << ",";
+                if (!is2DDimension) {
+                    myfile << vz << ",";
+                }
+                myfile << mass;
                 actualCountOfParticles++;
                 if (actualCountOfParticles < countOfParticles) {
                     myfile << "|";
@@ -224,7 +228,7 @@ private:
 public:
     double MASS_MIN_VALUE, MASS_MAX_VALUE, VELOCITY_MIN_VALUE, VELOCITY_MAX_VALUE,
         COORDINATE_MIN_VALUE, COORDINATE_MAX_VALUE, RADIUS_MIN_VALUE, RADIUS_MAX_VALUE, SPECIAL_COORDINATE;
-    bool is2DDimension, allowZMoving;
+    bool is2DDimension, ALLOW_Z_MOVING;
     int SPECIAL_COORDINATE_TYPE = -1;
     void generateParticles(unsigned int count){
         cout << "UTILITY READY TO INSTALL SYSTEM'S ARGUMENTS"<< endl;

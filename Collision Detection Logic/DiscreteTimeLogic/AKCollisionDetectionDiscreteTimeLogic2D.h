@@ -1,19 +1,19 @@
 //
-//  AKCollisionDetectionLogic2D.h
+//  AKCollisionDetectionDiscreteTimeLogic2D.h
 //  AKCollisionDetectionTest
 //
 //  Created by Artem Kravchenko on 12/21/14.
 //  Copyright (c) 2014 ShowTime. All rights reserved.
 //
 
-#ifndef __AKCollisionDetectionTest__AKCollisionDetectionLogic2D__
-#define __AKCollisionDetectionTest__AKCollisionDetectionLogic2D__
+#ifndef __AKCollisionDetectionTest__AKCollisionDetectionDiscreteTimeLogic2D__
+#define __AKCollisionDetectionTest__AKCollisionDetectionDiscreteTimeLogic2D__
 
 #include <stdio.h>
-#include "AKCollisionDetectionLogic.h"
+#include "AKCollisionDetectionDiscreteTimeLogic.h"
 #include "AKShapeVisualizer.h"
 
-class AKCollisionDetectionLogic2D : public AKCollisionDetectionLogic {
+class AKCollisionDetectionDiscreteTimeLogic2D : public AKCollisionDetectionDiscreteTimeLogic {
 
 protected:
     float           _originX;                       // The most left coordinate of system
@@ -33,4 +33,4 @@ public:
     virtual void    drawCells();
 };
 
-#endif /* defined(__AKCollisionDetectionTest__AKCollisionDetectionLogic2D__) */
+#endif /* defined(__AKCollisionDetectionTest__AKCollisionDetectionDiscreteTimeLogic2D__) */

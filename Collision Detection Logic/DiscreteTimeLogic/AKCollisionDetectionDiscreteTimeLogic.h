@@ -1,5 +1,5 @@
 //
-//  AKCollisionDetectionLogic.h
+//  AKCollisionDetectionDiscreteTimeLogic.h
 //  AKCollisionDetectionFramework
 //
 //  Created by Artem Kravchenko on 9/21/14.
@@ -20,7 +20,7 @@
 using std::vector;
 typedef vector<AKCell>             AKCellsList;
 
-class AKCollisionDetectionLogic {
+class AKCollisionDetectionDiscreteTimeLogic {
     
 #ifdef UNIT_TESTS
     friend class collision_detection_suite;

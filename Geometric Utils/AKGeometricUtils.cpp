@@ -16,26 +16,27 @@
 
 double AKGeometricUtils::getTimeToCollisionBetweenTwoParticles(AKParticle const *p1, AKParticle const *p2)
 {
+    int dimesion = (p1->sphere.is2dDimension) ? 2 : 3;
     // NEED TO RESEARCH CHANGE OF BEHAVIOR OF COMPUTATION COLLISIOIN BETWEEN TWO PARTICLES
     // RELATED TO LOCAL TIME OF EACH PARTILCES
     // p1->sphere.center --> r10
-    double tmpR20shift[2];
-    for (int i = 0; i < 2; i++) {
+    double tmpR20shift[dimesion];
+    for (int i = 0; i < dimesion; i++) {
         tmpR20shift[i] = p2->sphere.center[i] + (p1->localTime - p2->localTime)*((p2->velocity)[i]);
     }
     // tmpR20shift --> r20shift
     // p1->velocity --> v1
     // p2->velocity --> v2
-    double deltaV[2], deltaR[2];
+    double deltaV[dimesion], deltaR[dimesion];
     double L = p1->sphere.radius + p2->sphere.radius,
             A = 0, B = 0, D = 0, deltaRSquare = 0;
-    VECTOR_DIFERRENCE_FOR_ARRAYS(p1->velocity, p2->velocity, deltaV, 2)
-    VECTOR_DIFERRENCE_FOR_ARRAYS(p1->sphere.center , p2->sphere.center, deltaR, 2)
+    VECTOR_DIFERRENCE_FOR_ARRAYS(p1->velocity, p2->velocity, deltaV, dimesion)
+    VECTOR_DIFERRENCE_FOR_ARRAYS(p1->sphere.center , p2->sphere.center, deltaR, dimesion)
     //VECTOR_DIFERRENCE_FOR_ARRAYS(p1->sphere.center , tmpR20shift, deltaR, count)
-    DOT_PRODUCT_FOR_ARRAYS(deltaV, deltaV, A, 2)
-    DOT_PRODUCT_FOR_ARRAYS(deltaR, deltaV, B, 2) // B = -(deltaR.dot(deltaV));
+    DOT_PRODUCT_FOR_ARRAYS(deltaV, deltaV, A, dimesion)
+    DOT_PRODUCT_FOR_ARRAYS(deltaR, deltaV, B, dimesion) // B = -(deltaR.dot(deltaV));
     B = 0 - B;
-    DOT_PRODUCT_FOR_ARRAYS(deltaR, deltaR, deltaRSquare, 2)
+    DOT_PRODUCT_FOR_ARRAYS(deltaR, deltaR, deltaRSquare, dimesion)
     D = B*B - A*(deltaRSquare - L*L);
     double time = (B - sqrtl(D)) / A;
     return time + p1->localTime;

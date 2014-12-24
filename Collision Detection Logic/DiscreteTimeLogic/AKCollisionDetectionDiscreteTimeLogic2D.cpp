@@ -1,32 +1,32 @@
 //
-//  AKCollisionDetectionLogic2D.cpp
+//  AKCollisionDetectionDiscreteTimeLogic2D.cpp
 //  AKCollisionDetectionTest
 //
 //  Created by Artem Kravchenko on 12/21/14.
 //  Copyright (c) 2014 ShowTime. All rights reserved.
 //
 
-#include "AKCollisionDetectionLogic2D.h"
+#include "AKCollisionDetectionDiscreteTimeLogic2D.h"
 #include <assert.h>
 
 #pragma mark - /* ---------- PROTECTED ---------- */
 #pragma mark - Set Bounds
-void AKCollisionDetectionLogic2D::setSystemBounds(AKBox* bounds)
+void AKCollisionDetectionDiscreteTimeLogic2D::setSystemBounds(AKBox* bounds)
 {
     _bounds = new AKBox(*bounds);
 }
-int AKCollisionDetectionLogic2D::countOfCell()
+int AKCollisionDetectionDiscreteTimeLogic2D::countOfCell()
 {
     return _cellsCountInCol * _cellsCountInRow;
 }
-void AKCollisionDetectionLogic2D::fillCell(AKCell& cell, int index)
+void AKCollisionDetectionDiscreteTimeLogic2D::fillCell(AKCell& cell, int index)
 {
     cell.bounds.center[0] = _cellWidth * (index % _cellsCountInRow) + _cellWidth / 2;
     cell.bounds.center[1] = _cellHeight * (index / _cellsCountInRow) + _cellHeight / 2;
     cell.bounds.radius[0] = _cellWidth / 2;
     cell.bounds.radius[1] = _cellHeight / 2;
 }
-void AKCollisionDetectionLogic2D::fillNeighborsForCell(AKCell *cell,int index)
+void AKCollisionDetectionDiscreteTimeLogic2D::fillNeighborsForCell(AKCell *cell,int index)
 {
     /*
      Way in which we will move to detect collision with neighborhood partices
@@ -75,11 +75,11 @@ void AKCollisionDetectionLogic2D::fillNeighborsForCell(AKCell *cell,int index)
     std:cout << std::endl;
 }
 #pragma mark - Fill event in queue
-inline int AKCollisionDetectionLogic2D::dimension()
+inline int AKCollisionDetectionDiscreteTimeLogic2D::dimension()
 {
     return 2;
 }
-inline void AKCollisionDetectionLogic2D::setMeasure(int* measure, int* nextIndexCell, int sign, AKCollisionCompareType compareType, AKParticle const *particle)
+inline void AKCollisionDetectionDiscreteTimeLogic2D::setMeasure(int* measure, int* nextIndexCell, int sign, AKCollisionCompareType compareType, AKParticle const *particle)
 {
     if (sign == 1) {
         if (compareType == AKCollisionCompareXType) {
@@ -96,7 +96,7 @@ inline void AKCollisionDetectionLogic2D::setMeasure(int* measure, int* nextIndex
     }
 }
 #pragma mark - /* ---------- PUBLIC ---------- */
-inline int AKCollisionDetectionLogic2D::indexOfCellForParticle(AKParticle const * particle)
+inline int AKCollisionDetectionDiscreteTimeLogic2D::indexOfCellForParticle(AKParticle const * particle)
 {
     int indexX, indexY, returnIndex;
     double pointX = (particle->sphere.center)[0], pointY = (particle->sphere.center)[1];
@@ -106,15 +106,15 @@ inline int AKCollisionDetectionLogic2D::indexOfCellForParticle(AKParticle const 
     assert (returnIndex < _cellList->size() && returnIndex >= 0);
     return returnIndex;
 }
-void AKCollisionDetectionLogic2D::updateEventQueueInTime(double time)
+void AKCollisionDetectionDiscreteTimeLogic2D::updateEventQueueInTime(double time)
 {
-    AKCollisionDetectionLogic::updateEventQueueInTime(time);
+    AKCollisionDetectionDiscreteTimeLogic::updateEventQueueInTime(time);
     assert(_nextEvent->firstParticle->sphere.center[0] + _nextEvent->firstParticle->sphere.radius < DISPLAY_WIDTH);
     assert(_nextEvent->firstParticle->sphere.center[0] - _nextEvent->firstParticle->sphere.radius >= -1);
     assert(_nextEvent->firstParticle->sphere.center[1] + _nextEvent->firstParticle->sphere.radius < DISPLAY_HEIGHT);
     assert(_nextEvent->firstParticle->sphere.center[1] - _nextEvent->firstParticle->sphere.radius >= -1);
 }
-void AKCollisionDetectionLogic2D::setBound(AKBox* bounds, float originX, float originY, float originZ, unsigned int row, unsigned int col, unsigned int range)
+void AKCollisionDetectionDiscreteTimeLogic2D::setBound(AKBox* bounds, float originX, float originY, float originZ, unsigned int row, unsigned int col, unsigned int range)
 {
     _originX = originX;
     _originY = originY;
@@ -135,7 +135,7 @@ void AKCollisionDetectionLogic2D::setBound(AKBox* bounds, float originX, float o
         _cellList->push_back(cell);
     }
 }
-void AKCollisionDetectionLogic2D::drawCells()
+void AKCollisionDetectionDiscreteTimeLogic2D::drawCells()
 {
     int count = _cellList->size() & INT_MAX;
     for (int i = 0; i < count; i++) {

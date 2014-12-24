@@ -11,12 +11,12 @@
 
 #include <stdio.h>
 #include "openglinit.h"
-#include "AKCollisionDetectionLogic3D.h"
+#include "AKCollisionDetectionDiscreteTimeLogic3D.h"
 
 class AKOpenGLHandheld : public AKOpenGLInitDelegate {
 
 private:
-    AKCollisionDetectionLogic   *_collisionDetectionLogic;
+    AKCollisionDetectionDiscreteTimeLogic   *_collisionDetectionLogic;
     vector<AKParticle*>         *particlesArray;
     
     void initSystemData();

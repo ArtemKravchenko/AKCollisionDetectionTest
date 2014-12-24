@@ -1,5 +1,5 @@
 //
-//  AKCollisionDetectionLogic.cpp
+//  AKCollisionDetectionDiscreteTimeLogic.cpp
 //  AKCollisionDetectionTest
 //
 //  Created by Artem Kravchenko on 9/22/14.
@@ -7,7 +7,7 @@
 //
 
 #include <stdio.h>
-#include "AKCollisionDetectionLogic.h"
+#include "AKCollisionDetectionDiscreteTimeLogic.h"
 #include "AKPhysicsUtils.h"
 #include "AKException.h"
 #include "AKDefines.h"
@@ -17,7 +17,7 @@
 using namespace std;
 
 #pragma mark /* -------------------  PUBLIC FUNCTIONS ------------------- */
-void AKCollisionDetectionLogic::fillEventsInQueue(unsigned int capacity)
+void AKCollisionDetectionDiscreteTimeLogic::fillEventsInQueue(unsigned int capacity)
 {
     if (!_isBoundsAlreadySet || !_isParticlesAlreadySet)
         return;
@@ -60,7 +60,7 @@ void AKCollisionDetectionLogic::fillEventsInQueue(unsigned int capacity)
     nextEventFromListEvents();
     _timeTotal = 0;
 }
-void AKCollisionDetectionLogic::updateEventQueueInTime(double time)
+void AKCollisionDetectionDiscreteTimeLogic::updateEventQueueInTime(double time)
 {
     if (!_isBoundsAlreadySet || !_isParticlesAlreadySet)
         return;
@@ -73,10 +73,8 @@ void AKCollisionDetectionLogic::updateEventQueueInTime(double time)
         }
         switch (eventType) {
             case AKEventParticleToBoundType:
-            {
                 handleParticleToBoundCollisionEvent();
                 break;
-            }
             case AKEventParticleToCellType:
                 handleParticleLeftCellCollisionEvent();
                 break;
@@ -91,13 +89,13 @@ void AKCollisionDetectionLogic::updateEventQueueInTime(double time)
     }
     updateParticlesLocation(time);
 }
-void AKCollisionDetectionLogic::setParticlesList(AKParticlesList *particlsList)
+void AKCollisionDetectionDiscreteTimeLogic::setParticlesList(AKParticlesList *particlsList)
 {
     _particleList = new AKParticlesList(*particlsList);
     _isParticlesAlreadySet = true;
 }
 #pragma mark /* -------------------  PRIVATE FUNCTIONS ------------------- */
-inline void AKCollisionDetectionLogic::nextEventFromListEvents()
+inline void AKCollisionDetectionDiscreteTimeLogic::nextEventFromListEvents()
 {
     if (_nextEvent != NULL) {
         delete _nextEvent;
@@ -106,7 +104,7 @@ inline void AKCollisionDetectionLogic::nextEventFromListEvents()
     _nextEvent = _eventsQueue->delMin();
     _timeToEvent = _nextEvent->timeToEvent;
 }
-inline AKEvent* AKCollisionDetectionLogic::insertEventInQueue(AKParticle const * firstParticle, AKParticle const * secondParticle)
+inline AKEvent* AKCollisionDetectionDiscreteTimeLogic::insertEventInQueue(AKParticle const * firstParticle, AKParticle const * secondParticle)
 {
     double timeToEvent = AKGeometricUtils::getInstance().getTimeToCollisionBetweenTwoParticles(firstParticle, secondParticle);
     if (isnan(timeToEvent) || timeToEvent - firstParticle->localTime < 0) {
@@ -121,7 +119,7 @@ inline AKEvent* AKCollisionDetectionLogic::insertEventInQueue(AKParticle const *
     _eventsQueue->insert(event);
     return event;
 }
-inline AKEvent* AKCollisionDetectionLogic::insertEventInQueue(AKParticle const * particle, AKBox const * box)
+inline AKEvent* AKCollisionDetectionDiscreteTimeLogic::insertEventInQueue(AKParticle const * particle, AKBox const * box)
 {
     double finalTimeToEvent = std::numeric_limits<double>::max(), tmpTimeToEvent, tmpMeasure;
     int dim = dimension();
@@ -163,7 +161,7 @@ inline AKEvent* AKCollisionDetectionLogic::insertEventInQueue(AKParticle const *
     _eventsQueue->insert(event);
     return event;
 }
-inline void AKCollisionDetectionLogic::addEventsForParticleAndParticlesInCurrentCell(AKParticle *particle, AKCell* cell, unsigned int startIndex)
+inline void AKCollisionDetectionDiscreteTimeLogic::addEventsForParticleAndParticlesInCurrentCell(AKParticle *particle, AKCell* cell, unsigned int startIndex)
 {
     AKParticle              *secondParticle;
     AKParticlesList const   *particlesList = &cell->insideParticles;
@@ -176,7 +174,7 @@ inline void AKCollisionDetectionLogic::addEventsForParticleAndParticlesInCurrent
         }
     }
 }
-inline void AKCollisionDetectionLogic::addEventsForParticleAndParticlesInNeighborCells(AKParticle *particle, const int *neighborsIndexes)
+inline void AKCollisionDetectionDiscreteTimeLogic::addEventsForParticleAndParticlesInNeighborCells(AKParticle *particle, const int *neighborsIndexes)
 {
     int                     neighborIndex;
     const AKCell            *neigbor;
@@ -198,7 +196,7 @@ inline void AKCollisionDetectionLogic::addEventsForParticleAndParticlesInNeighbo
         }
     }
 }
-inline void AKCollisionDetectionLogic::updateParticlesLocation(double time)
+inline void AKCollisionDetectionDiscreteTimeLogic::updateParticlesLocation(double time)
 {
     unsigned int particlesCount = _particleList->size() & INT_MAX;
     AKParticle *currentParticle;
@@ -207,7 +205,7 @@ inline void AKCollisionDetectionLogic::updateParticlesLocation(double time)
         AKPhysicsUtils::getInstance().changeParticlePlaceInTime(currentParticle, time);
     }
 }
-inline void AKCollisionDetectionLogic::handleParticleToParticleCollisionEvent()
+inline void AKCollisionDetectionDiscreteTimeLogic::handleParticleToParticleCollisionEvent()
 {
     /*
      1. Change velocity of each of two  particles
@@ -225,7 +223,7 @@ inline void AKCollisionDetectionLogic::handleParticleToParticleCollisionEvent()
     addEventsRelatedToParticle(p1);
     addEventsRelatedToParticle(p2);
 }
-inline void AKCollisionDetectionLogic::handleParticleToBoundCollisionEvent()
+inline void AKCollisionDetectionDiscreteTimeLogic::handleParticleToBoundCollisionEvent()
 {
     /*
      1. Change velocity of particle
@@ -240,7 +238,7 @@ inline void AKCollisionDetectionLogic::handleParticleToBoundCollisionEvent()
     // 3
     addEventsRelatedToParticle(particle);
 }
-inline void AKCollisionDetectionLogic::handleParticleLeftCellCollisionEvent()
+inline void AKCollisionDetectionDiscreteTimeLogic::handleParticleLeftCellCollisionEvent()
 {
     /*
      1. Remove particle from cell and add particle to new cell
@@ -262,7 +260,7 @@ inline void AKCollisionDetectionLogic::handleParticleLeftCellCollisionEvent()
     // 3
     addEventsRelatedToParticle(particle);
 }
-inline void AKCollisionDetectionLogic::addEventsRelatedToParticle(AKParticle* particle)
+inline void AKCollisionDetectionDiscreteTimeLogic::addEventsRelatedToParticle(AKParticle* particle)
 {
     // 3.1 Compute events with particles and other particles inside current cell
     // 3.2 Compute events with particles inside current cell and bound of cell
@@ -283,7 +281,7 @@ inline void AKCollisionDetectionLogic::addEventsRelatedToParticle(AKParticle* pa
     neighborsIndexes = &cell->neighbors[0];
     addEventsForParticleAndParticlesInNeighborCells(particle, neighborsIndexes);
 }
-inline void AKCollisionDetectionLogic::removeEventsForParticle(AKParticle* particle) // O(n)
+inline void AKCollisionDetectionDiscreteTimeLogic::removeEventsForParticle(AKParticle* particle) // O(n)
 {
     _eventsQueue->deleteElementForParticle(particle);
 }
