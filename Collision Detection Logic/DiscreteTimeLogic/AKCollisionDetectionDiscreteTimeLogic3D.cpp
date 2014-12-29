@@ -10,11 +10,20 @@
 #include <assert.h>
 
 #pragma mark - /* ---------- PROTECTED ---------- */
-#pragma mark - Set Bounds
-void AKCollisionDetectionDiscreteTimeLogic3D::setSystemBounds(AKBox* bounds)
+void AKCollisionDetectionDiscreteTimeLogic3D::fillUnreachableNeighbors()
 {
-    _bounds = new AKBox(*bounds);
+    unsigned int particlesCount = _particleList->size() & INT_MAX;
+    _unrachableNeighbors = new int*[particlesCount];
+    // int array[54];
+    for (int i = 0; i < particlesCount; i++) {
+        // TODO: need to implement
+    }
 }
+void AKCollisionDetectionDiscreteTimeLogic3D::fillReachableNeighbors()
+{
+    // TODO: need to implement
+}
+#pragma mark - Set Bounds
 int AKCollisionDetectionDiscreteTimeLogic3D::countOfCell()
 {
     return AKCollisionDetectionDiscreteTimeLogic2D::countOfCell() * _cellsCountInRange;
@@ -99,6 +108,14 @@ inline int AKCollisionDetectionDiscreteTimeLogic3D::dimension()
 {
     return 3;
 }
+inline int  AKCollisionDetectionDiscreteTimeLogic3D::countUnreachableCells()
+{
+    return 9;
+}
+inline int AKCollisionDetectionDiscreteTimeLogic3D::countOfHalfNeighbors()
+{
+    return 13;
+}
 inline void AKCollisionDetectionDiscreteTimeLogic3D::setMeasure(int* measure, int*nextIndexCell, int sign, AKCollisionCompareType compareType, AKParticle const *particle)
 {
     AKCollisionDetectionDiscreteTimeLogic2D::setMeasure(measure, nextIndexCell, sign, compareType, particle);
@@ -133,7 +150,7 @@ inline int AKCollisionDetectionDiscreteTimeLogic3D::indexOfCellForParticle(AKPar
 void AKCollisionDetectionDiscreteTimeLogic3D::updateEventQueueInTime(double time)
 {
     AKCollisionDetectionDiscreteTimeLogic2D::updateEventQueueInTime(time);
-    assert(_nextEvent->firstParticle->sphere.center[2] + _nextEvent->firstParticle->sphere.radius < DISPLAY_WIDTH);
+    assert(_nextEvent->firstParticle->sphere.center[2] + _nextEvent->firstParticle->sphere.radius < _bounds->center[2] + _bounds->radius[2]);
     assert(_nextEvent->firstParticle->sphere.center[2] - _nextEvent->firstParticle->sphere.radius >= -1);
 }
 void AKCollisionDetectionDiscreteTimeLogic3D::setBound(AKBox* bounds, float originX, float originY, float originZ, unsigned int row, unsigned int col, unsigned int range)

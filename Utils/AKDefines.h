@@ -14,7 +14,7 @@ const int DISPLAY_HEIGHT = 600;
 const int DISPLAY_DEPTH = 600;
 
 #define DEFINE_IS_EUQAL_WITH_ERROR\
-        constexpr static const double ERROR = 0.1; \
+        constexpr static const double ERROR = 0.0000000001; \
         inline bool isEqualWithError(double value1, double value2) const { \
         return (value1 - ERROR) <= value2 && value2 <= (value1 + ERROR); }
 

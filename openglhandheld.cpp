@@ -29,6 +29,12 @@ std::vector<std::string> &split(const std::string &s, char delim, std::vector<st
     return elems;
 }
 
+vector<string> specialElements() {
+    vector<string> *elems = new vector<string>();
+    elems->push_back("188.9761,130.768979,7,-6.1514561,9.32459503,20");
+    return *elems;
+}
+
 vector<string> readArrayOfParticles() {
 #ifdef __APPLE__
     CFBundleRef mainBundle = CFBundleGetMainBundle();
@@ -47,7 +53,7 @@ vector<string> readArrayOfParticles() {
     string fileName = "example_collision.txt";
     fileName = path + slash + fileName;
     string line;
-    vector<string> *elems = new vector<string>();;
+    vector<string> *elems = new vector<string>();
     ifstream myfile (fileName);
     if (myfile.is_open())
     {
@@ -63,18 +69,18 @@ vector<string> readArrayOfParticles() {
 void AKOpenGLHandheld::initSystemData()
 {
     AKSystemGenerator::getInstance().is2DDimension = is2DDimension;
-    AKSystemGenerator::getInstance().RADIUS_MIN_VALUE = 5;
-    AKSystemGenerator::getInstance().RADIUS_MAX_VALUE = 10;
-    AKSystemGenerator::getInstance().COORDINATE_MIN_VALUE = 100;
-    AKSystemGenerator::getInstance().COORDINATE_MAX_VALUE = min(min(_displayWidth, _displayHeight), _displayDepth) / 2 - AKSystemGenerator::getInstance().RADIUS_MAX_VALUE*2;
+    AKSystemGenerator::getInstance().RADIUS_MIN_VALUE = 3;
+    AKSystemGenerator::getInstance().RADIUS_MAX_VALUE = 4;
+    AKSystemGenerator::getInstance().COORDINATE_MIN_VALUE = 2 * AKSystemGenerator::getInstance().RADIUS_MAX_VALUE;
+    AKSystemGenerator::getInstance().COORDINATE_MAX_VALUE = min(min(_displayWidth, _displayHeight), _displayDepth) - AKSystemGenerator::getInstance().RADIUS_MAX_VALUE*2;
     AKSystemGenerator::getInstance().MASS_MIN_VALUE = 10;
     AKSystemGenerator::getInstance().MASS_MAX_VALUE = 20;
     AKSystemGenerator::getInstance().VELOCITY_MIN_VALUE = 2;
     AKSystemGenerator::getInstance().VELOCITY_MAX_VALUE = 10;
     if (!is2DDimension) {
-        AKSystemGenerator::getInstance().ALLOW_Z_MOVING = true;
+        AKSystemGenerator::getInstance().ALLOW_Z_MOVING = false;
     }
-    AKSystemGenerator::getInstance().generateParticles(150);
+    AKSystemGenerator::getInstance().generateParticles(64);
 }
 
 void AKOpenGLHandheld::setUpModels()
@@ -84,23 +90,23 @@ void AKOpenGLHandheld::setUpModels()
     if (!_displayHeightWasSet) _displayHeight = 600;
     initSystemData();
     if (is2DDimension) {
-        _collisionDetectionLogic = new AKCollisionDetectionDiscreteTimeLogic2D();
+        _collisionDetectionLogic = new AKCollisionDetectionEventDrivenLogic2D();// AKCollisionDetectionDiscreteTimeLogic2D();
     } else {
-        _collisionDetectionLogic = new AKCollisionDetectionDiscreteTimeLogic3D();
+        _collisionDetectionLogic = new AKCollisionDetectionEventDrivenLogic3D();// AKCollisionDetectionDiscreteTimeLogic3D();
     }
     
     AKBox *bounds = new AKBox((is2DDimension) ? 2 :3);
-    bounds->center[0] = DISPLAY_WIDTH / 4; bounds->center[1] = DISPLAY_WIDTH / 4;
+    bounds->center[0] = _displayWidth / 2; bounds->center[1] = _displayHeight / 2;
     if (!is2DDimension) {
-        bounds->center[2] = DISPLAY_DEPTH / 4;
+        bounds->center[2] = _displayDepth / 2;
     }
-    bounds->radius[0] = DISPLAY_HEIGHT / 4; bounds->radius[1] = DISPLAY_HEIGHT / 4;
+    bounds->radius[0] = _displayWidth / 2; bounds->radius[1] = _displayHeight / 2;
     if (!is2DDimension) {
-        bounds->radius[2] = DISPLAY_DEPTH / 4;
+        bounds->radius[2] = _displayDepth / 2;
     }
     
-    _collisionDetectionLogic->setBound(bounds, originX, originY, originZ, 1, 1, 1);
-    vector<string> particlesData = readArrayOfParticles(); //
+    _collisionDetectionLogic->setBound(bounds, originX, originY, originZ, 8, 8, 1);
+    vector<string> particlesData = readArrayOfParticles();
     AKParticlesList *_particleList = new AKParticlesList();
     this->_particlesArray = new vector<AKParticle*>();
     vector<string> *elems;
@@ -128,6 +134,7 @@ void AKOpenGLHandheld::setUpModels()
         this->_particlesArray->push_back(particle);
         _particleList->push_back(particle);
         index = 0;
+        
     }
     
     _collisionDetectionLogic->setParticlesList(_particleList);

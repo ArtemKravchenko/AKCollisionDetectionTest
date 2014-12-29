@@ -19,7 +19,7 @@ void AKOpenGLInit::initOpenGl(int *argc, char ** argv)
     glutInitWindowSize(delegate->getDisplayWidth() + 100, delegate->getDisplayHeight() + 100);
     glutCreateWindow("Collision Detection Test");
     glutDisplayFunc(display);
-    glutTimerFunc(1, timer_change, 0);
+    glutTimerFunc(500, timer_change, 0);
     init();
 }
 void AKOpenGLInit::startModellingProcess()

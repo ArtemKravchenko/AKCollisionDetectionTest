@@ -10,6 +10,14 @@
 #define AKCollisionDetectionTest_AKException_h
 #include <exception>
 
+class wrongKorfType: public std::exception
+{
+    virtual const char* what() const throw()
+    {
+        return "Wrong koef value";
+    }
+};
+
 class wrongEventTypeException: public std::exception
 {
     virtual const char* what() const throw()

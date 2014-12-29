@@ -18,9 +18,9 @@ void AKPhysicsUtils::changeParticlePlaceInTime(AKParticle *particle, double time
     double velocityShift [dimension];
     PRODUCT_VECTOR_BY_NUMBER(particle->velocity, time, velocityShift, dimension);
     VECTOR_SUM_FOR_ARRAYS(particle->sphere.center, velocityShift, particle->sphere.center, dimension)
-    assert(particle->sphere.center[0] + particle->sphere.radius < DISPLAY_WIDTH);
+    assert(particle->sphere.center[0] + particle->sphere.radius <= DISPLAY_WIDTH + 1);
     assert(particle->sphere.center[0] - particle->sphere.radius >= -1);
-    assert(particle->sphere.center[1] + particle->sphere.radius < DISPLAY_HEIGHT);
+    assert(particle->sphere.center[1] + particle->sphere.radius <= DISPLAY_HEIGHT + 1);
     assert(particle->sphere.center[1] - particle->sphere.radius >= -1);
 }
 void AKPhysicsUtils::changeParticleVelocityAfterCollisionWithAnotherParticle(AKParticle *particle1, AKParticle *particle2)

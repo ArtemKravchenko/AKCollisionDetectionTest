@@ -6,6 +6,14 @@
 
 using namespace std;
 
+
+class AKPriorityQueueDelegate {
+    
+public:
+    virtual void recomputeEvent(AKEvent*) = 0;
+    virtual int  countUnreachableCells() = 0;
+};
+
 class AKPriorityQueue
 {
 protected:
@@ -15,9 +23,14 @@ protected:
     void sink(unsigned int k);
     void deleteElement(unsigned int k);
     void printQueue();
+    int  nearestPowerOfTwo(unsigned int);
+    AKEvent** getCurrentArray();
+    bool _useReserveArray;
+    AKEvent **_reserveArray;
 public:
-    unsigned int N = 0;
     AKEvent **_arrayOfElements;
+    AKPriorityQueueDelegate *delegate;
+    unsigned int N = 0;
     AKPriorityQueue();
     AKPriorityQueue(unsigned int capacity);
     ~AKPriorityQueue();
@@ -28,6 +41,9 @@ public:
     AKEvent* secondEvent();
     void deleteElement(AKEvent* key);
     void deleteElementForParticle(AKParticle*);
+    void deleteElementForParticle(AKParticle*, int*, int);   // Remove only events with another particles only from unreachable cells
+    void updateEventForParticle(AKParticle*);
+    bool particleBelongsUnrechableCells(AKParticle*, int*, int);
 };
 
 #endif // AKPRIORITYQUEUE_H

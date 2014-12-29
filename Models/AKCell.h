@@ -11,8 +11,8 @@ using namespace std;
 #include "AKParticle.h"
 
 
-static const int NEIGHBORS_COUNT_2D = 8;
-static const int NEIGHBORS_COUNT_3D = 26;
+static const int NEIGHBORS_COUNT_2D = 4;
+static const int NEIGHBORS_COUNT_3D = 13;
 typedef std::vector<AKParticle*> AKParticlesList;
 typedef std::vector<int> AKNeigbors;
 

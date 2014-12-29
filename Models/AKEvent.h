@@ -26,6 +26,7 @@ struct AKEvent {
     double          timeToEvent;
     unsigned        int index;
     int             nextCellIndex;
+    int             transitionIndex;
     
     AKEvent(unsigned int dimension)
     {
